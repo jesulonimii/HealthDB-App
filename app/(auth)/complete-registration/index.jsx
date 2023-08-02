@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth, useLocalStorage } from "@hooks";
-import { QUERY_KEYS } from "@utils";
+import { OAU_DEPARTMENTS, QUERY_KEYS } from "@utils";
 import { Body, Header } from "@components/layout";
 import { Card } from "@components/ui";
 import DateSelector from "@components/ui/DateSelector";
@@ -13,25 +13,19 @@ import DropDownPicker from "@components/ui/DropDownPicker";
 
 const CompleteRegistrationScreen = ({}) => {
 
+	//========================Hooks====================================
 	const [isLoading, setIsLoading] = useState(false);
 	const { saveToStorage } = useLocalStorage();
 	const { Logout, user, setUser } = useAuth();
-
-	const [dateOfBirth, setDateOfBirth] = useState(user?.personal_info?.date_of_birth || new Date());
-	const [showPicker, setShowPicker] = useState(false);
-
+	const router = useRouter();
 	const {
-		register,
-		handleSubmit,
-		watch,
-		control,
-		formState: { errors },
+		register, handleSubmit, watch,
+		control, formState: { errors },
 	} = useForm();
+	//=================================================================
 
-	useEffect(() => {
-		errors && console.log("errors?", errors);
-	}, [errors]);
 
+	// =====================Constants and Lists==========================
 	const genderList = [
 		{
 			label: "Male",
@@ -42,24 +36,36 @@ const CompleteRegistrationScreen = ({}) => {
 			value: "female",
 		},
 	];
+	const levelsList = [
+		{
+			label: "100",
+			value: "100",
+		},
+		{
+			label: "200",
+			value: "200",
 
-	const oau_faculties = {
-		technology: ["Computer Science", "Mechanical Engineering", "Electrical Engineering", "Civil Engineering"],
-		science: ["Physics", "Chemistry", "Biology", "Mathematics", "Statistics"],
-		social_science: ["Economics", "Political Science", "Psychology", "Sociology"],
-		arts: ["English Language", "History", "Philosophy", "Theater Arts"],
-		management: ["Accounting", "Business Administration", "Finance", "Marketing"],
-		education: ["Educational Foundations", "Educational Technology", "Physical and Health Education"],
-		agriculture: ["Agronomy", "Animal Science", "Agricultural Economics", "Crop Production"],
-		medicine: ["Medicine and Surgery", "Dentistry", "Medical Laboratory Science"],
-		law: ["Law"],
-		environmental_sciences: ["Architecture", "Urban and Regional Planning", "Estate Management"],
-		pharmacy: ["Pharmacy"],
-		environmental_design_management: ["Building", "Quantity Surveying"],
-		geography: ["Geography"],
-		religious_studies: ["Religious Studies"],
-	};
+		},
+		{
+			label: "300",
+			value: "300",
+		},
+		{
+			label: "400",
+			value: "400",
+		},
+		{
+			label: "500",
+			value: "500",
+		},
+	];
+	const oau_faculties = OAU_DEPARTMENTS;
+	//============================================================
 
+
+	//==================States================================
+	const [dateOfBirth, setDateOfBirth] = useState(user?.personal_info?.date_of_birth || new Date());
+	const [showPicker, setShowPicker] = useState(false);
 	const [selectedGender, setSelectedGender] = useState(genderList[0].value);
 	const [facultyList, setFacultyList] = useState([
 		{ label: "Select Faculty", value: "select_faculty" },
@@ -67,17 +73,22 @@ const CompleteRegistrationScreen = ({}) => {
 	const [departmentList, setDepartmentList] = useState([
 		{ label: "Select Department", value: "select_department" },
 	]);
-
-
 	const [selectedFaculty, setSelectedFaculty] = useState("");
 	const [selectedDepartment, setSelectedDepartment] = useState("");
+	const [selectedLevel, setSelectedLevel] = useState("300");
+	//================================================================
 
+
+	//====================Effects========================
 	useEffect(() => parseFacultyList(oau_faculties, setFacultyList), []); // parse faculty list to dropdown list
 
 	useEffect(() => parseDepartmentList(oau_faculties, selectedFaculty, setDepartmentList), [selectedFaculty]); // parse department list to dropdown list
 
-	const router = useRouter();
+	useEffect(() => {
+		errors.length > 0 && alert(JSON.stringify(errors));
+	}, [errors]);
 
+	//============================================================
 
 	const onSubmit = (data) => {
 		setIsLoading(true);
@@ -89,6 +100,9 @@ const CompleteRegistrationScreen = ({}) => {
 			user_id: user.user_id,
 			first_name: user.personal_info.first_name,
 			last_name: user.personal_info.last_name,
+			faculty: selectedFaculty,
+			department: selectedDepartment,
+			level: selectedLevel,
 		};
 
 
@@ -107,9 +121,7 @@ const CompleteRegistrationScreen = ({}) => {
 			});
 	};
 
-	useEffect(() => {
-		errors.length > 0 && alert(JSON.stringify(errors));
-	}, [errors]);
+
 
 	return (
 		<View className={`h-full flex items-center justify-center w-full bg-gray-50`}>
@@ -136,6 +148,7 @@ const CompleteRegistrationScreen = ({}) => {
 							/>
 						)}
 						name="phone"
+						type="number"
 						rules={{ required: true }}
 					/>
 
@@ -160,6 +173,7 @@ const CompleteRegistrationScreen = ({}) => {
 								  label={"Date of Birth"}
 								  minDate={new Date(1990, 0, 1)}
 								  maxDate={new Date()}
+								  formatDateValue={"Do MMMM, YYYY"}
 								  setDate={setDateOfBirth}
 								  showPicker={showPicker}
 								  setShowPicker={setShowPicker} />
@@ -200,21 +214,6 @@ const CompleteRegistrationScreen = ({}) => {
 						*To be filled only by students of Obafemi Awolowo University.
 					</Text>
 
-					{/*<Controller
-						control={control}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<FormInput
-								label="Matric Number"
-								placeholder="ex: CSC/2023/001"
-								onBlur={onBlur}
-								style="flex-1 mr-1"
-								onChangeText={(value) => onChange(value)}
-								value={value}
-							/>
-						)}
-						name="matric_number"
-						rules={{ required: false }}
-					/>*/}
 
 					<DropDownPicker
 						prompt="Select your faculty"
@@ -231,30 +230,22 @@ const CompleteRegistrationScreen = ({}) => {
 						prompt="Select your department"
 						items={departmentList}
 						label="Department"
-						mode={"dialog"}
 						style="w-full bg-gray-100 rounded-lg"
 						selected={selectedDepartment}
 						onSelect={(value) => {
 							setSelectedDepartment(value);
 						}} />
 
+					<DropDownPicker
+						prompt="Select your level"
+						items={levelsList}
+						label="Level"
+						style="w-full bg-gray-100 rounded-lg"
+						selected={selectedLevel}
+						onSelect={(value) => {
+							setSelectedLevel(value);
+						}} />
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<FormInput
-								label="Level"
-								placeholder="ex: 300"
-								onBlur={onBlur}
-								style="flex-1 mr-1"
-								type="number"
-								onChangeText={(value) => onChange(value)}
-								value={value}
-							/>
-						)}
-						name="level"
-						rules={{ required: false }}
-					/>
 				</Card>
 
 				<Card style="my-1">

@@ -1,6 +1,6 @@
 import QUERY_KEYS from "./query-keys";
+import OAU_DEPARTMENTS from "./oau-departments";
 import axios from "axios";
-import PropTypes from "prop-types";
 
 const api_url = process.env.EXPO_PUBLIC_API_URL;
 
@@ -69,4 +69,4 @@ const callApi = async (config) => {
 	}
 };
 
-export { GLOBAL, callApi, QUERY_KEYS, COLORS, HEX2RGBA, stringToBoolean };
+export { GLOBAL, callApi, QUERY_KEYS, COLORS, HEX2RGBA, stringToBoolean, OAU_DEPARTMENTS };
