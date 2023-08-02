@@ -31,11 +31,9 @@ const BookAppointmentBottomSheet = ({ show, setShow }) => {
 			setDate(new Date(new Date().getTime() + 30 * 60000));
 		} else if (moment(selectedDate).isAfter(moment(_6pm))) {
 			setDate(new Date(_5pm));
-		}
-		else if (moment(selectedDate).isBefore(moment(_8am))) {
+		} else if (moment(selectedDate).isBefore(moment(_8am))) {
 			setDate(new Date(_5pm));
-		}
-		else {
+		} else {
 			setDate(selectedDate);
 		}
 	};

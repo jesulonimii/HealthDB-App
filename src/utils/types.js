@@ -9,8 +9,13 @@ export const object = PropTypes.object;
 export const array = PropTypes.array;
 export const any = PropTypes.any;
 export const date = PropTypes.instanceOf(Date);
-export function oneOf(array) {
-	return PropTypes.oneOf(array);
+
+export function oneOf(object) {
+	return PropTypes.oneOf(object);
+}
+
+export function arrayOf(array) {
+	return PropTypes.arrayOf(PropTypes.shape(array));
 }
 
 
@@ -27,6 +32,9 @@ export const required = {
 	date : PropTypes.instanceOf(Date).isRequired,
 	oneOf(array) {
 		return PropTypes.oneOf(array).isRequired;
+	},
+	arrayOf(array) {
+		return PropTypes.arrayOf(PropTypes.shape(array));
 	}
 }
 

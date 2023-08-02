@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BackHandler, Linking, Platform, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { Linking, Platform, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import moment from "moment";
 import { Card } from "@components/ui";
 import { Body } from "@components/layout";
@@ -8,8 +8,6 @@ import { useAuth } from "@hooks";
 import { CustomButton } from "@ui";
 import QRCodeBottomSheet from "../modals/QRCodeBottomSheet";
 import BookAppointmentBottomSheet from "../modals/BookAppointmentBottomSheet";
-import { useRouter } from "expo-router";
-import useCustomNavigation from "@/src/hooks/useCustomNavigation";
 import { DeleteAppointment } from "@api";
 
 export default function Dashboard() {
@@ -55,8 +53,8 @@ export default function Dashboard() {
 						{moment().format("HH") < 12
 							? "Good morning "
 							: moment().format("HH") < 16
-							? "Good afternoon "
-							: "Good evening "}
+								? "Good afternoon "
+								: "Good evening "}
 						<Text className="text-primary">{first_name}</Text>,
 					</Text>
 
@@ -169,8 +167,8 @@ export default function Dashboard() {
 }
 
 function OpenIntentToMap() {
-	const lat = ""//"7.517977271192355";
-	const lng = ""//"4.5262728938128625";
+	const lat = "";//"7.517977271192355";
+	const lng = "";//"4.5262728938128625";
 	const label = "OAU Health Centre";
 
 	const scheme = Platform.select({ ios: "maps://0,0?q=", android: "geo:0,0?q=" });

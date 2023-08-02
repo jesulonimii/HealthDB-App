@@ -1,8 +1,7 @@
 import { Text, View } from "react-native";
 import { CustomButton, FormInput } from "@ui";
 import { CompleteInfo } from "@api";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "@context";
+import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth, useLocalStorage } from "@hooks";
@@ -10,15 +9,15 @@ import { QUERY_KEYS } from "@utils";
 import { Body, Header } from "@components/layout";
 import { Card } from "@components/ui";
 import DateSelector from "@components/ui/DateSelector";
+import DropDownPicker from "@components/ui/DropDownPicker";
 
 const CompleteRegistrationScreen = ({}) => {
-	const { user, setUser } = useContext(UserContext);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const { saveToStorage } = useLocalStorage();
-	const { Logout } = useAuth();
+	const { Logout, user, setUser } = useAuth();
 
-	const [date, setDate] = useState(new Date(new Date().getTime()));
+	const [dateOfBirth, setDateOfBirth] = useState(user?.personal_info?.date_of_birth || new Date());
 	const [showPicker, setShowPicker] = useState(false);
 
 	const {
@@ -30,8 +29,52 @@ const CompleteRegistrationScreen = ({}) => {
 	} = useForm();
 
 	useEffect(() => {
-		console.log("errors?", errors);
+		errors && console.log("errors?", errors);
 	}, [errors]);
+
+	const genderList = [
+		{
+			label: "Male",
+			value: "male",
+		},
+		{
+			label: "Female",
+			value: "female",
+		},
+	];
+
+	const oau_faculties = {
+		technology: ["Computer Science", "Mechanical Engineering", "Electrical Engineering", "Civil Engineering"],
+		science: ["Physics", "Chemistry", "Biology", "Mathematics", "Statistics"],
+		social_science: ["Economics", "Political Science", "Psychology", "Sociology"],
+		arts: ["English Language", "History", "Philosophy", "Theater Arts"],
+		management: ["Accounting", "Business Administration", "Finance", "Marketing"],
+		education: ["Educational Foundations", "Educational Technology", "Physical and Health Education"],
+		agriculture: ["Agronomy", "Animal Science", "Agricultural Economics", "Crop Production"],
+		medicine: ["Medicine and Surgery", "Dentistry", "Medical Laboratory Science"],
+		law: ["Law"],
+		environmental_sciences: ["Architecture", "Urban and Regional Planning", "Estate Management"],
+		pharmacy: ["Pharmacy"],
+		environmental_design_management: ["Building", "Quantity Surveying"],
+		geography: ["Geography"],
+		religious_studies: ["Religious Studies"],
+	};
+
+	const [selectedGender, setSelectedGender] = useState(genderList[0].value);
+	const [facultyList, setFacultyList] = useState([
+		{ label: "Select Faculty", value: "select_faculty" },
+	]);
+	const [departmentList, setDepartmentList] = useState([
+		{ label: "Select Department", value: "select_department" },
+	]);
+
+
+	const [selectedFaculty, setSelectedFaculty] = useState("");
+	const [selectedDepartment, setSelectedDepartment] = useState("");
+
+	useEffect(() => parseFacultyList(oau_faculties, setFacultyList), []); // parse faculty list to dropdown list
+
+	useEffect(() => parseDepartmentList(oau_faculties, selectedFaculty, setDepartmentList), [selectedFaculty]); // parse department list to dropdown list
 
 	const router = useRouter();
 
@@ -42,10 +85,10 @@ const CompleteRegistrationScreen = ({}) => {
 
 		const patched_data = {
 			...data,
+			date_of_birth: dateOfBirth,
 			user_id: user.user_id,
 			first_name: user.personal_info.first_name,
 			last_name: user.personal_info.last_name,
-			phone: "-",
 		};
 
 
@@ -84,6 +127,22 @@ const CompleteRegistrationScreen = ({}) => {
 						control={control}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<FormInput
+								label="Phone number"
+								placeholder="+234 (0) 812 345 6789"
+								onBlur={onBlur}
+								style="flex-1 mr-1"
+								onChangeText={(value) => onChange(value)}
+								value={value}
+							/>
+						)}
+						name="phone"
+						rules={{ required: true }}
+					/>
+
+					<Controller
+						control={control}
+						render={({ field: { onChange, onBlur, value } }) => (
+							<FormInput
 								label="Email Address"
 								placeholder="johndoe@student.oauife.edu.eng"
 								onBlur={onBlur}
@@ -96,12 +155,12 @@ const CompleteRegistrationScreen = ({}) => {
 						rules={{ required: true }}
 					/>
 
-					<DateSelector date={date}
-								  mode={'date'}
-								  label={'Date of Birth'}
+					<DateSelector date={dateOfBirth}
+								  mode={"date"}
+								  label={"Date of Birth"}
 								  minDate={new Date(1990, 0, 1)}
 								  maxDate={new Date()}
-								  setDate={setDate}
+								  setDate={setDateOfBirth}
 								  showPicker={showPicker}
 								  setShowPicker={setShowPicker} />
 
@@ -121,21 +180,18 @@ const CompleteRegistrationScreen = ({}) => {
 						rules={{ required: true }}
 					/>
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<FormInput
-								label="Gender"
-								placeholder="ex: Male, Female"
-								onBlur={onBlur}
-								style="flex-1 mr-1"
-								onChangeText={(value) => onChange(value)}
-								value={value}
-							/>
-						)}
-						name="gender"
-						rules={{ required: true }}
-					/>
+
+					<DropDownPicker
+						prompt="Select your Gender"
+						items={genderList}
+						label="Gender"
+						style="w-full bg-gray-100 rounded-lg"
+						selectionColor="#000"
+						selected={selectedGender}
+						onSelect={(value) => {
+							setSelectedGender(value);
+						}} />
+
 				</Card>
 
 				<Card style="my-1">
@@ -160,37 +216,28 @@ const CompleteRegistrationScreen = ({}) => {
 						rules={{ required: false }}
 					/>*/}
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<FormInput
-								label="Faculty"
-								placeholder="ex: Technology"
-								onBlur={onBlur}
-								style="flex-1 mr-1"
-								onChangeText={(value) => onChange(value)}
-								value={value}
-							/>
-						)}
-						name="faculty"
-						rules={{ required: false }}
-					/>
+					<DropDownPicker
+						prompt="Select your faculty"
+						items={facultyList}
+						label="Faculty"
+						mode={"dialog"}
+						style="w-full bg-gray-100 rounded-lg"
+						selected={selectedFaculty}
+						onSelect={(value) => {
+							setSelectedFaculty(value);
+						}} />
 
-					<Controller
-						control={control}
-						render={({ field: { onChange, onBlur, value } }) => (
-							<FormInput
-								label="Department"
-								placeholder="ex: Computer Science and Engineering"
-								onBlur={onBlur}
-								style="flex-1 mr-1"
-								onChangeText={(value) => onChange(value)}
-								value={value}
-							/>
-						)}
-						name="department"
-						rules={{ required: false }}
-					/>
+					<DropDownPicker
+						prompt="Select your department"
+						items={departmentList}
+						label="Department"
+						mode={"dialog"}
+						style="w-full bg-gray-100 rounded-lg"
+						selected={selectedDepartment}
+						onSelect={(value) => {
+							setSelectedDepartment(value);
+						}} />
+
 
 					<Controller
 						control={control}
@@ -217,7 +264,7 @@ const CompleteRegistrationScreen = ({}) => {
 						control={control}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<FormInput
-								label="Allergies"
+								label="Medical Allergies"
 								placeholder="Enter if any..."
 								onBlur={onBlur}
 								style="flex-1 mr-1"
@@ -256,6 +303,36 @@ const CompleteRegistrationScreen = ({}) => {
 			</Body>
 		</View>
 	);
+};
+
+
+const parseFacultyList = (oau_faculties, setFacultyList) => {
+
+	const list = [];
+
+	Object.keys(oau_faculties || []).forEach((faculty) => {
+		const value = faculty.substring(0, 1).toUpperCase() + faculty.substring(1).replaceAll("_", " ");
+		list.push({ label: value, value: value.replaceAll(" ", "_").toLowerCase() });
+	});
+
+	setFacultyList(list);
+
+};
+
+const parseDepartmentList = (oau_faculties, selectedFaculty, setDepartment) => {
+
+
+	const department = oau_faculties[selectedFaculty.toLowerCase() || "technology"] || [];
+	const list = [];
+
+	department.forEach((department) => {
+		const value = department.substring(0, 1).toUpperCase() + department.substring(1).replaceAll("_", " ");
+		list.push({ label: value, value: value.toLowerCase() });
+	});
+
+
+	setDepartment(list);
+
 };
 
 export default CompleteRegistrationScreen;

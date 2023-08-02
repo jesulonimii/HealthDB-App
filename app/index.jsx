@@ -1,4 +1,4 @@
-import { Redirect, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
 import { QUERY_KEYS } from "@utils";

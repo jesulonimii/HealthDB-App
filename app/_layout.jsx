@@ -7,7 +7,7 @@ import { UserContext } from "@context";
 import { Slot } from "expo-router";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-import { Outfit_400Regular, Outfit_500Medium, Outfit_700Bold, useFonts } from "@expo-google-fonts/outfit";
+import { Outfit_500Medium, Outfit_700Bold, useFonts } from "@expo-google-fonts/outfit";
 
 const queryClient = new QueryClient();
 

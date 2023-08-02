@@ -4,3 +4,4 @@ export LoadingSpinner from "./LoadingSpinner";
 export FormInput from "./FormInput";
 export BottomSheetWrapper from "./BottomSheetWrapper";
 export CustomImage from "./Image.ui";
+export DropDownPicker from "./DropDownPicker";

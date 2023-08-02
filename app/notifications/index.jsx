@@ -1,6 +1,5 @@
 import { Text, View } from "react-native";
-import React, { useContext, useEffect } from "react";
-import { ScreenContext } from "@context";
+import React from "react";
 import { Body, Header } from "@components/layout";
 
 function Notifications({}) {

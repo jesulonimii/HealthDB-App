@@ -1,6 +1,4 @@
 import { Text, View } from "react-native";
-import { useContext, useEffect } from "react";
-import { ScreenContext } from "@context";
 
 function Appointments({}) {
 	return (

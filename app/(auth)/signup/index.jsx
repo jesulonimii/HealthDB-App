@@ -5,7 +5,6 @@ import { UserContext } from "@context";
 import { Link, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth, useLocalStorage } from "@hooks";
-import { QUERY_KEYS } from "@utils";
 import OauLogo from "@assets/images/oau-logo.png";
 
 const SignupScreen = ({}) => {
@@ -13,7 +12,7 @@ const SignupScreen = ({}) => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const { saveToStorage } = useLocalStorage();
-	const { Signup } = useAuth()
+	const { Signup } = useAuth();
 
 	const {
 		register,
@@ -31,7 +30,7 @@ const SignupScreen = ({}) => {
 		Signup(data)
 			.then((r) => {
 				setIsLoading(false);
-			})
+			});
 	};
 
 	return (

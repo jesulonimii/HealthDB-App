@@ -1,14 +1,11 @@
-import React, { useContext } from "react";
-import { Image, Text, View } from "react-native";
-import { GLOBAL, QUERY_KEYS } from "@utils";
-import { UserContext } from "@context";
+import React from "react";
+import { Text, View } from "react-native";
+import { GLOBAL } from "@utils";
 import { Card } from "@components/ui";
 import { Body, Header } from "@components/layout";
 import { CustomButton, CustomImage } from "@ui";
-import { useAuth, useLocalStorage } from "@hooks";
-import { useRouter } from "expo-router";
+import { useAuth } from "@hooks";
 import moment from "moment/moment";
-import * as Icons from "react-native-heroicons/outline";
 
 function ProfileScreen() {
 	const { user, Logout } = useAuth();
@@ -37,7 +34,8 @@ function ProfileScreen() {
 			<Body style={"bg-gray-50"}>
 				<Card style="my-2 items-center justify-center">
 
-					<CustomImage defaultImage={GLOBAL.default_user.profile_image} source={profile_image} style="rounded-full w-24 h-24 my-4" />
+					<CustomImage defaultImage={GLOBAL.default_user.profile_image} source={profile_image}
+								 style="rounded-full w-24 h-24 my-4" />
 
 					<Text className="font-outfit text-xl">{`${first_name} ${last_name}`}</Text>
 

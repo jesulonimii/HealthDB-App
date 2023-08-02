@@ -30,6 +30,7 @@ export default function HomeLayout() {
 		BackHandler.exitApp();
 	});
 
+
 	return (
 		<>
 			<Tabs className="w-full">
@@ -45,7 +46,7 @@ export default function HomeLayout() {
 								header: (props) => (
 									<Header
 										title={props.route.name === "appointments" ? props.route.name : null}
-										start_image={profile_image}
+										start_image={profile_image || "-"}
 										endIcon={<Icons.BellIcon className="w-full text-gray-500 mr-2" />}
 										endIconClick={() => router.push("/notifications")}
 									/>
