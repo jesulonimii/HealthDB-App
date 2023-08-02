@@ -1,0 +1,41 @@
+{
+  "cli": {
+    "version": ">= 3.10.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://192.168.43.207:3333",
+        "EXPO_PUBLIC_API_KEY": "qwerty12345"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://my-json-server.typicode.com/jesulonimii/swep",
+        "EXPO_PUBLIC_API_KEY": "qwerty12345"
+      }
+    },
+    "production": {
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://my-json-server.typicode.com/jesulonimii/swep",
+        "EXPO_PUBLIC_API_KEY": "qwerty12345"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

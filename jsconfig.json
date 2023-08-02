@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "jsx": "preserve",
+        "checkJs": true,
+        "paths": {
+          "@assets/*": ["/src/assets/*"],
+          "@components/*": ["/src/components/*"],
+          "@ui": ["/src/components/ui"],
+          "@context": ["/src/context"],
+          "@utils": ["/src/utils"],
+          "@types": ["/src/utils/types.js"],
+          "@screens/*": ["/src/screens/*"],
+          "@api": ["/src/api"],
+          "@hooks": ["/src/hooks"],
+          "@/*": ["/*"]
+        }
+    }
+}

@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "OAU Health Centre",
+    "slug": "HealthDB",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "codes.jesulonimii.swep.healthdb"
+    },
+    "scheme": "healthdb",
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "887f3a90-4fc7-41a4-b3e9-234b2f940f43"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/887f3a90-4fc7-41a4-b3e9-234b2f940f43"
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
