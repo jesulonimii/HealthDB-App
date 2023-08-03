@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@context";
 import { Link, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { useAuth, useLocalStorage } from "@hooks";
+import { useAuth, useCustomNavigation, useLocalStorage } from "@hooks";
 import OauLogo from "@assets/images/oau-logo.png";
 import { errorTextFieldClass } from "@utils";
 
@@ -13,6 +13,7 @@ const LoginScreen = ({}) => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const { saveToStorage } = useLocalStorage();
+	const { overrideBackClick, exitApp } = useCustomNavigation();
 	const { Login } = useAuth();
 
 	const {
@@ -31,14 +32,20 @@ const LoginScreen = ({}) => {
 		const id = data.id.toLowerCase().trim();
 		const password = data.password.trim();
 
-		Login(id, password).then((r) => {
-			setIsLoading(false);
-		});
+		Login(id, password)
+			.then((r) => {
+				setIsLoading(false);
+			})
+			.catch((e) => setIsLoading(false));
 	};
 
 	useEffect(() => {
-		console.log("form-errors", errors);
+		errors.length > 0 && console.log("form-errors", errors);
 	}, [errors]);
+
+	overrideBackClick(() => {
+		exitApp();
+	});
 
 	return (
 		<View className={`h-full flex items-center justify-center w-full p-8`}>

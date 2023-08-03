@@ -1,11 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserContext } from "@context";
-import { useContext, useEffect } from "react";
-import { Login as LoginUser } from "@api";
-import { QUERY_KEYS } from "@utils";
-import useLocalStorage from "./useLocalStorage";
+import { useEffect } from "react";
 import { useNavigation, useRouter } from "expo-router";
-import { GetUserInfo } from "@/src/api/Auth.api";
+import { BackHandler } from "react-native";
 
 const useCustomNavigation = () => {
 	const router = useRouter();
@@ -26,8 +21,13 @@ const useCustomNavigation = () => {
 		}, []);
 	};
 
+	const exitApp = () => {
+		BackHandler.exitApp();
+	};
+
 	return {
 		overrideBackClick,
+		exitApp,
 	};
 };
 

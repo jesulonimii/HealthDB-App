@@ -39,8 +39,6 @@ const useAuth = () => {
 	};
 
 	const Login = async (id, password) => {
-		//TODO: remove next line
-		alert(`Login from ${API_URL}`);
 		return LoginUser(id, password).then((r) => {
 			if (!r.error) {
 				setUser(r);
@@ -53,7 +51,7 @@ const useAuth = () => {
 						console.log("error-saving-to-storage", e);
 					});
 			} else {
-				alert(r.error);
+				toast({ message: r.error?.split("":"[1], title: r.error?.split("","[0], type: "danger" });
 			}
 		});
 	};
@@ -66,7 +64,7 @@ const useAuth = () => {
 					router.push("/complete-registration");
 				});
 			} else {
-				alert(r.error);
+				toast({ message: r.error?.split(":")[1], title: r.error?.split(",")[0], type: "danger" });
 			}
 		});
 	};

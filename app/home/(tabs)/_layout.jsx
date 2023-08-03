@@ -21,8 +21,6 @@ export default function HomeLayout() {
 		secondaryColor: COLORS.secondary,
 	};
 
-
-
 	const bottomNav = [
 		{
 			link: "dashboard",
@@ -35,7 +33,7 @@ export default function HomeLayout() {
 			link: "appointments",
 			icon: {
 				default: <Edit />,
-				active: <Edit {...activeIconStyle} />,,
+				active: <Edit {...activeIconStyle} />,
 			},
 		},
 		{

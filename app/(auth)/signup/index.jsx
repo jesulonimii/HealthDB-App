@@ -28,9 +28,11 @@ const SignupScreen = ({}) => {
 	const onSubmit = (data) => {
 		setIsLoading(true);
 
-		Signup(data).then((r) => {
-			setIsLoading(false);
-		});
+		Signup(data)
+			.then((r) => {
+				setIsLoading(false);
+			})
+			.catch((e) => setIsLoading(false));
 	};
 
 	useEffect(() => {

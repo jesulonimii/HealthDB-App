@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useContext, useEffect } from "react";
-import { QUERY_KEYS } from "@utils";
+import { QUERY_KEYS, toast } from "@utils";
 import { UserContext } from "@context";
 import { getUserInfo } from "@api";
 import { useLocalStorage } from "@hooks";
@@ -36,10 +36,17 @@ export default function App() {
 		},
 	});
 
+	useEffect(() => {
+		/*stringToBoolean(process.env.EXPO_PUBLIC_HIDDEN_FEATURES) &&*/
+		toast({
+			message: `Using app with API: ${process.env.EXPO_PUBLIC_API_URL}`,
+			duration: 5000,
+		});
+	}, []);
+
 	//check if user is logged in
 	useEffect(() => {
 		getFromStorage(QUERY_KEYS.user_data).then((data) => {
-
 			console.log("user data", data);
 
 			if (data) {
