@@ -4,6 +4,7 @@
   "main": "expo-router/entry.js",
   "scripts": {
     "start": "expo start",
+    "update": "eas update",
     "start-no-cache": "expo start --clear",
     "android": "expo start --android",
     "ios": "expo start --ios",
