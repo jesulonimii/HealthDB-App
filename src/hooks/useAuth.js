@@ -51,7 +51,7 @@ const useAuth = () => {
 						console.log("error-saving-to-storage", e);
 					});
 			} else {
-				toast({ message: r.error?.split("":"[1], title: r.error?.split("","[0], type: "danger" });
+				toast({ message: r.error?.split(":")[1], title: r.error?.split(":"[0]), type: "danger" });
 			}
 		});
 	};
