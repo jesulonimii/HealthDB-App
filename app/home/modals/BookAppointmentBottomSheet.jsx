@@ -48,18 +48,17 @@ const BookAppointmentBottomSheet = ({ show, setShow }) => {
 				.toUpperCase()}`,
 		};
 
-
 		BookAppointment(payload, user?.user_id)
 			.then((r) => {
 				setIsLoading(false);
 				setShow(false);
 
 				refreshUser().then((r) => {
-					toast({ message: "Appointment Booked successfully!", type: "success" ;});
+					toast({ message: "Appointment Booked successfully!", type: "success" });
 				});
 			})
 			.catch((e) => {
-				alert(e.messa;ge);
+				alert(e.message);
 				setIsLoading(false);
 			});
 	};
@@ -70,14 +69,16 @@ const BookAppointmentBottomSheet = ({ show, setShow }) => {
 				<Text className="mb-1 text-lg font-bold"> Book Appointment at the health center</Text>
 				<Text className="mb-4 text-gray-500"> Fill in the details to book an appointment today.</Text>
 
-				<DateSelector date={date}
-							  mode={"time"}
-							  displayType={"spinner"}
-							  setDate={setDate}
-							  minDate={new Date()}
-							  minuteInterval={15}
-							  showPicker={showPicker}
-							  setShowPicker={setShowPicker} />
+				<DateSelector
+					date={date}
+					mode={"time"}
+					displayType={"spinner"}
+					setDate={setDate}
+					minDate={new Date()}
+					minuteInterval={15}
+					showPicker={showPicker}
+					setShowPicker={setShowPicker}
+				/>
 
 				<CustomButton loading={isLoading} onClick={submitBooking}>
 					Schedule Appointment
