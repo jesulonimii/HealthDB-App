@@ -15,7 +15,7 @@ const CustomImage = ({
 		}
 	}, [src]);
 
-	const [imgS;rc, setImgSrc] = useState(src || source || defaultImage);
+	const [imgSrc, setImgSrc] = useState(src || source || defaultImage);
 
 	return (
 		<>
