@@ -15,19 +15,35 @@ export default function HomeLayout() {
 	const router = useRouter();
 
 	//set up bottom nav bar
-	const iconStyle = "text-gray-500 w-full";
+	const activeIconStyle = {
+		set: "bulk",
+		primaryColor: COLORS.primary,
+		secondaryColor: COLORS.secondary,
+	};
+
+
+
 	const bottomNav = [
 		{
 			link: "dashboard",
-			icon: <Home />,
+			icon: {
+				default: <Home />,
+				active: <Home {...activeIconStyle} />,
+			},
 		},
 		{
 			link: "appointments",
-			icon: <Edit />,
+			icon: {
+				default: <Edit />,
+				active: <Edit {...activeIconStyle} />,,
+			},
 		},
 		{
 			link: "news",
-			icon: <Activity />,
+			icon: {
+				default: <Activity />,
+				active: <Activity {...activeIconStyle} />,
+			},
 		},
 	];
 
@@ -44,9 +60,9 @@ export default function HomeLayout() {
 							name={item.link}
 							key={index}
 							options={{
-								tabBarIcon: () => item.icon,
-								tabBarActiveTintColor: COLORS.success,
-								tabBarActiveBackgroundColor: "#2021240f",
+								tabBarIcon: ({ focused }) => {
+									return focused ? item.icon.active : item.icon.default;
+								},
 								header: (props) => (
 									<Header
 										title={props.route.name === "appointments" ? props.route.name : null}

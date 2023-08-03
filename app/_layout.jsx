@@ -10,7 +10,6 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Outfit_500Medium, Outfit_700Bold, useFonts } from "@expo-google-fonts/outfit";
 import { AlertNotificationRoot } from "react-native-alert-notification";
 import { IconlyProvider } from "@lnanhkhoa/react-native-iconly";
-//import { IconlyProvider } from "react-native-iconly";
 
 const queryClient = new QueryClient();
 

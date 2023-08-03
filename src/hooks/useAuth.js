@@ -39,6 +39,8 @@ const useAuth = () => {
 	};
 
 	const Login = async (id, password) => {
+		//TODO: remove next line
+		alert(`Login from ${API_URL}`);
 		return LoginUser(id, password).then((r) => {
 			if (!r.error) {
 				setUser(r);

@@ -25,10 +25,6 @@
       "package": "codes.jesulonimii.swep.healthdb"
     },
     "scheme": "healthdb",
-    "web": {
-      "favicon": "./assets/favicon.png",
-      "bundler": "metro"
-    },
     "extra": {
       "eas": {
         "projectId": "887f3a90-4fc7-41a4-b3e9-234b2f940f43"
