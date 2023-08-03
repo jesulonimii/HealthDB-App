@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Linking, Platform, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import moment from "moment";
 import { Card } from "@components/ui";
@@ -9,6 +9,7 @@ import { CustomButton } from "@ui";
 import QRCodeBottomSheet from "../modals/QRCodeBottomSheet";
 import BookAppointmentBottomSheet from "../modals/BookAppointmentBottomSheet";
 import { DeleteAppointment } from "@api";
+import { toast } from "@utils";
 
 export default function Dashboard() {
 	const { user, refreshUser } = useAuth();
@@ -16,6 +17,7 @@ export default function Dashboard() {
 	const { first_name, profile_image } = user?.personal_info || {};
 	const [showAppointmentBS, setShowAppointmentBS] = useState(false);
 	const [showQRCode, setShowQRCode] = useState(false);
+	const [health_centre_status, setHealthCentreStatus] = useState("pending");
 
 	const home_actions = [
 		{
@@ -35,12 +37,28 @@ export default function Dashboard() {
 		},
 	];
 
+	useEffect(() => {
+		const { status } = health_centre_registration || {};
+
+		if (status === "true") {
+			setHealthCentreStatus("true");
+		} else if (status === "pending") {
+			setHealthCentreStatus("pending");
+		} else if (status === "false") {
+			setHealthCentreStatus("false");
+		}
+
+		console.log(health_centre_status);
+	}, [user]);
+
 	const refreshUserDetails = async () => {
+		toast({ message: "Refreshed user details", duration: 2000, type: "success" });
 		return refreshUser();
 	};
 
 	const cancelAppointment = () => {
-		DeleteAppointment(user?.id).then((r) => {
+		DeleteAppointment(user?.user_id).then((r) => {
+			toast({ message: "Appointment cancelled", duration: 2000 });
 			return refreshUser();
 		});
 	};
@@ -53,8 +71,8 @@ export default function Dashboard() {
 						{moment().format("HH") < 12
 							? "Good morning "
 							: moment().format("HH") < 16
-								? "Good afternoon "
-								: "Good evening "}
+							? "Good afternoon "
+							: "Good evening "}
 						<Text className="text-primary">{first_name}</Text>,
 					</Text>
 
@@ -99,19 +117,32 @@ export default function Dashboard() {
 						<Text className="text-gray-500 mt-1">Health Centre Registration Status:</Text>
 
 						<View className="flex flex-row items-center h-full gap-x-1">
-							{health_centre_registration?.status ? (
+							{health_centre_status === "true" ? (
 								<View className="w-2 aspect-square bg-success rounded-full"></View>
+							) : health_centre_status === "pending" ? (
+								<View className="w-2 aspect-square bg-warning rounded-full"></View>
 							) : (
 								<View className="w-2 aspect-square bg-error rounded-full"></View>
 							)}
 							<Text className="text-black font-medium">
-								{health_centre_registration?.status ? "Completed" : "Incomplete"}
+								{health_centre_status === "true"
+									? "Completed"
+									: health_centre_status === "pending"
+									? "Pending"
+									: "Incomplete"}
 							</Text>
 						</View>
 					</View>
 
-					{!health_centre_registration?.status && (
-						<Text className="text-gray-500 bg-red-100 rounded-lg p-2 text-center text-danger w-full mt-2">
+					{health_centre_status !== "true" && (
+						<Text
+							className={`rounded-lg p-2 text-center w-full mt-2 ${
+								health_centre_status === "true"
+									? "bg-green-100 text-success"
+									: health_centre_status === "pending"
+									? "bg-amber-50 text-warning"
+									: "bg-red-100 text-error"
+							}`}>
 							{health_centre_registration?.message}
 						</Text>
 					)}
@@ -122,7 +153,7 @@ export default function Dashboard() {
 						<View className="flex">
 							<Text className="text-gray-500 mt-1">
 								Appointment id:{" "}
-								<Text className="text-black font-medium">{pending_appointment?.id}</Text>
+								<Text className="text-black font-medium">{pending_appointment?.appointment_id}</Text>
 							</Text>
 
 							<Text className="text-gray-500 mt-1">

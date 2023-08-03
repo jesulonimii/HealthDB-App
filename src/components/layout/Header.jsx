@@ -32,8 +32,8 @@ function Header({
 					{start_image && (
 						<CustomImage
 							style="w-8 h-8 rounded-full"
+							src={start_image}
 							defaultImage={GLOBAL.default_user.profile_image}
-							source={GLOBAL.default_user.profile_image}
 						/>
 					)}
 					{backButton && <Icons.ChevronLeftIcon className="text-black w-10 h-10" />}

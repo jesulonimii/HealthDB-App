@@ -6,6 +6,7 @@ import { UserContext } from "@context";
 import { BackHandler } from "react-native";
 import { useCustomNavigation } from "@hooks";
 import { COLORS } from "@utils";
+import { Activity, Edit, Home } from "@lnanhkhoa/react-native-iconly";
 
 export default function HomeLayout() {
 	const { overrideBackClick } = useCustomNavigation();
@@ -18,18 +19,21 @@ export default function HomeLayout() {
 	const bottomNav = [
 		{
 			link: "dashboard",
-			icon: <Icons.HomeIcon className={iconStyle} />,
+			icon: <Home />,
 		},
 		{
 			link: "appointments",
-			icon: <Icons.DocumentTextIcon className={iconStyle} />,
+			icon: <Edit />,
+		},
+		{
+			link: "news",
+			icon: <Activity />,
 		},
 	];
 
 	overrideBackClick(() => {
 		BackHandler.exitApp();
 	});
-
 
 	return (
 		<>

@@ -2,17 +2,25 @@ import { TouchableOpacity } from "react-native";
 import { FormInput } from "@components/ui/index";
 import moment from "moment/moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { date, functions, number, oneOf, required, string } from "@types";
+import { date, functions, oneOf, required, string } from "@types";
 
 const DateSelector = (props) => {
-
 	const {
-		date, setDate, showPicker, setShowPicker, minDate, label,
-		maxDate, mode = "date", onDateChange, validateDate,
-		formatDateValue = "Do MMMM, [by] hh:mm A", placeholder = `Pick ${mode.toUpperCase()}`,
-		displayType = "calendar", ...rest
+		date,
+		setDate,
+		showPicker,
+		setShowPicker,
+		minDate,
+		label,
+		maxDate,
+		mode = "date",
+		onDateChange,
+		validateDate,
+		formatDateValue = "Do MMMM, [by] hh:mm A",
+		placeholder = `Pick ${mode.toUpperCase()}`,
+		displayType = "calendar",
+		...rest
 	} = props;
-
 
 	const onChange = (event, selectedDate) => {
 		const dDate = selectedDate;
@@ -21,9 +29,7 @@ const DateSelector = (props) => {
 		setDate(dDate);
 		onDateChange && onDateChange(event, dDate);
 		validateDate && validateDate(dDate);
-
 	};
-
 
 	return (
 		<>
@@ -54,7 +60,7 @@ const DateSelector = (props) => {
 
 
 DateSelector.propTypes = {
-	date: required.date,
+	date: date,
 	setDate: required.functions,
 	showPicker: required.boolean,
 	setShowPicker: required.functions,
@@ -67,7 +73,6 @@ DateSelector.propTypes = {
 	placeholder: string,
 	label: string,
 	displayType: oneOf(["default", "spinner", "calendar", "clock"]),
-
 };
 
 export default DateSelector;

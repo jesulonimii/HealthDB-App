@@ -1,10 +1,12 @@
-import QUERY_KEYS from "./query-keys";
-import OAU_DEPARTMENTS from "./oau-departments";
+export QUERY_KEYS from "./query-keys";
+export OAU_DEPARTMENTS from "./oau-departments";
 import axios from "axios";
 
-const api_url = process.env.EXPO_PUBLIC_API_URL;
+export { toast } from "./CustomAlerts";
 
-const GLOBAL = {
+export const api_url = process.env.EXPO_PUBLIC_API_URL;
+
+export const GLOBAL = {
 	theme_color: "#1f8318",
 	API_URL: process.env.EXPO_PUBLIC_API_URL,
 	API_KEY: process.env.EXPO_PUBLIC_API_KEY,
@@ -18,8 +20,9 @@ const GLOBAL = {
 	},
 };
 
-const COLORS = {
+export const COLORS = {
 	primary: "#010066",
+	secondary: "#b4a22f",
 	info: "#045da6",
 	success: "#1f8318",
 	danger: "#d32f2f",
@@ -27,7 +30,7 @@ const COLORS = {
 	warning: "#ffa000",
 };
 
-const HEX2RGBA = (hex, alpha = 1) => {
+export const HEX2RGBA = (hex, alpha = 1) => {
 	if (hex.length < 6 || hex.length > 7) {
 		return `rgba(1, 1, 1, ${alpha})`;
 	} else {
@@ -36,7 +39,7 @@ const HEX2RGBA = (hex, alpha = 1) => {
 	}
 };
 
-const stringToBoolean = (stringValue) => {
+export const stringToBoolean = (stringValue) => {
 	switch (stringValue?.toString().toLowerCase()?.trim()) {
 		case "true":
 		case "yes":
@@ -58,15 +61,15 @@ const stringToBoolean = (stringValue) => {
 };
 
 
-const callApi = async (config) => {
+export const callApi = async (config) => {
 	try {
 		const { data } = await axios({ ...config, timeout: 20000 });
-		console.log("data", data);
+		console.log("axios-data@callApi: ", data);
 		return data;
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 		return error.response.data;
 	}
 };
 
-export { GLOBAL, callApi, QUERY_KEYS, COLORS, HEX2RGBA, stringToBoolean, OAU_DEPARTMENTS };
+export const errorTextFieldClass = "border border-red-500 bg-red-50";

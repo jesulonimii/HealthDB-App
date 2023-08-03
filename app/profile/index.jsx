@@ -19,11 +19,11 @@ function ProfileScreen() {
 	const stats = [
 		{
 			name: "Appointments made",
-			value: appointments.length,
+			value: appointments?.length,
 		},
 		{
 			name: "Hospitalizations",
-			value: hospitalizations.length,
+			value: hospitalizations?.length,
 		},
 	];
 
@@ -33,9 +33,11 @@ function ProfileScreen() {
 
 			<Body style={"bg-gray-50"}>
 				<Card style="my-2 items-center justify-center">
-
-					<CustomImage defaultImage={GLOBAL.default_user.profile_image} source={profile_image}
-								 style="rounded-full w-24 h-24 my-4" />
+					<CustomImage
+						defaultImage={GLOBAL.default_user.profile_image}
+						src={profile_image}
+						style="rounded-full w-24 h-24 my-4"
+					/>
 
 					<Text className="font-outfit text-xl">{`${first_name} ${last_name}`}</Text>
 
@@ -61,14 +63,14 @@ function ProfileScreen() {
 
 				<Card style="my-2" title="Health Center Info">
 					<Text className="text-gray-500 mt-1">
-						Health Centre id: <Text className="text-black font-medium">{user.user_id.toUpperCase()}</Text>
+						Health Centre id: <Text className="text-black font-medium">{user.user_id?.toUpperCase()}</Text>
 					</Text>
 
 					<Text className="text-gray-500 mt-1">
 						Last Visit:{" "}
 						<Text className="text-black font-medium">
-							{user.medical_history.last_visit
-								? moment(user.medical_history.last_visit).fromNow()
+							{user?.medical_history?.last_visit
+								? moment(user.medical_history?.last_visit).fromNow()
 								: "None"}
 						</Text>
 					</Text>

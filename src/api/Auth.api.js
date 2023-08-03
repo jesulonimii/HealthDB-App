@@ -1,4 +1,3 @@
-import axios from "axios";
 import { callApi, GLOBAL } from "@utils";
 
 const API_URL = GLOBAL.API_URL;
@@ -64,8 +63,9 @@ export const CompleteInfo = async (data) => {
 		date_of_birth, gender, address, email, additional_medical_info, allergies,
 	} = data
 
+    console.log("check null", data);
+
 	const payload = {
-		user_id: id.toLowerCase().trim(),
 		student: {
 			level: level.trim(),
 			department: department.trim(),
@@ -76,17 +76,17 @@ export const CompleteInfo = async (data) => {
 			first_name: first_name.trim(),
 			last_name: last_name.trim(),
 			profile_image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-			date_of_birth: date_of_birth.trim(),
+			date_of_birth: String(date_of_birth).trim(),
 			gender: gender.trim(),
 		},
 		contact_info: {
 			address: address.trim(),
-			phone: "-",
+			phone: phone.trim(),
 			email: email.trim(),
 		},
 		medical_history: {
-			additional_medical_info: additional_medical_info.trim(),
-			allergies: allergies.trim(),
+			additional_medical_info: additional_medical_info ? additional_medical_info.trim() : null,
+			allergies: allergies ? allergies.trim() : null,
 			surgeries: null,
 			last_visit: null,
 		},
@@ -95,13 +95,15 @@ export const CompleteInfo = async (data) => {
 
 	const config = {
 		method: "patch",
-		url: `${API_URL}/users/${encodeURI(id.toLowerCase().trim())}`,
+		url: `${API_URL}/users/${id.toLowerCase().trim().replaceAll("/", "%2F")}`,
 		data: payload,
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: API_KEY,
 		},
 	};
+
+    console.log(config.url);
 
 	return await callApi(config);
 };

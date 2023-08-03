@@ -1,29 +1,31 @@
 import { Text, View } from "react-native";
 import { CustomButton, FormInput } from "@ui";
 import { CompleteInfo } from "@api";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { useAuth, useLocalStorage } from "@hooks";
-import { OAU_DEPARTMENTS, QUERY_KEYS } from "@utils";
+import { useAuth, useCustomNavigation, useLocalStorage } from "@hooks";
+import { errorTextFieldClass, OAU_DEPARTMENTS, QUERY_KEYS } from "@utils";
 import { Body, Header } from "@components/layout";
 import { Card } from "@components/ui";
 import DateSelector from "@components/ui/DateSelector";
 import DropDownPicker from "@components/ui/DropDownPicker";
 
 const CompleteRegistrationScreen = ({}) => {
-
 	//========================Hooks====================================
 	const [isLoading, setIsLoading] = useState(false);
 	const { saveToStorage } = useLocalStorage();
+	const { overrideBackClick } = useCustomNavigation();
 	const { Logout, user, setUser } = useAuth();
 	const router = useRouter();
 	const {
-		register, handleSubmit, watch,
-		control, formState: { errors },
+		register,
+		handleSubmit,
+		watch,
+		control,
+		formState: { errors },
 	} = useForm();
 	//=================================================================
-
 
 	// =====================Constants and Lists==========================
 	const genderList = [
@@ -44,7 +46,6 @@ const CompleteRegistrationScreen = ({}) => {
 		{
 			label: "200",
 			value: "200",
-
 		},
 		{
 			label: "300",
@@ -62,22 +63,16 @@ const CompleteRegistrationScreen = ({}) => {
 	const oau_faculties = OAU_DEPARTMENTS;
 	//============================================================
 
-
 	//==================States================================
-	const [dateOfBirth, setDateOfBirth] = useState(user?.personal_info?.date_of_birth || new Date());
+	const [dateOfBirth, setDateOfBirth] = useState(new Date(user?.personal_info?.date_of_birth) || new Date());
 	const [showPicker, setShowPicker] = useState(false);
-	const [selectedGender, setSelectedGender] = useState(genderList[0].value);
-	const [facultyList, setFacultyList] = useState([
-		{ label: "Select Faculty", value: "select_faculty" },
-	]);
-	const [departmentList, setDepartmentList] = useState([
-		{ label: "Select Department", value: "select_department" },
-	]);
-	const [selectedFaculty, setSelectedFaculty] = useState("");
-	const [selectedDepartment, setSelectedDepartment] = useState("");
-	const [selectedLevel, setSelectedLevel] = useState("300");
+	const [selectedGender, setSelectedGender] = useState(user?.personal_info?.gender || genderList[0].value);
+	const [facultyList, setFacultyList] = useState([{ label: "Select Faculty", value: "select_faculty" }]);
+	const [departmentList, setDepartmentList] = useState([{ label: "Select Department", value: "select_department" }]);
+	const [selectedFaculty, setSelectedFaculty] = useState(user?.student?.faculty || "Technology");
+	const [selectedDepartment, setSelectedDepartment] = useState(user?.student?.department || "Computer Science");
+	const [selectedLevel, setSelectedLevel] = useState(user?.student?.level || "300");
 	//================================================================
-
 
 	//====================Effects========================
 	useEffect(() => parseFacultyList(oau_faculties, setFacultyList), []); // parse faculty list to dropdown list
@@ -90,9 +85,14 @@ const CompleteRegistrationScreen = ({}) => {
 
 	//============================================================
 
+	//====================Functions========================
+
+	overrideBackClick(() => {
+		Logout();
+	});
+
 	const onSubmit = (data) => {
 		setIsLoading(true);
-		console.log("Submitting: ", data);
 
 		const patched_data = {
 			...data,
@@ -103,25 +103,25 @@ const CompleteRegistrationScreen = ({}) => {
 			faculty: selectedFaculty,
 			department: selectedDepartment,
 			level: selectedLevel,
+			gender: selectedGender,
 		};
-
 
 		CompleteInfo(patched_data)
 			.then((r) => {
 				setIsLoading(false);
 
-				console.log(r);
-
 				if (!r.error) {
-					setUser(r.data);
-					saveToStorage(QUERY_KEYS.user_data, r.data).then((r) => router.push("/home"));
+					setUser(r);
+					saveToStorage(QUERY_KEYS.user_data, r).then((r) => router.push("/home"));
 				} else {
 					alert(r.error);
 				}
+			})
+			.catch((e) => {
+				setIsLoading(false);
+				console.log(e);
 			});
 	};
-
-
 
 	return (
 		<View className={`h-full flex items-center justify-center w-full bg-gray-50`}>
@@ -130,6 +130,7 @@ const CompleteRegistrationScreen = ({}) => {
 			<Body style="py-8">
 				<View className="w-full">
 					<Text className="my-1"> Enter your details to finish your registration.</Text>
+					<Text className="mt-4 text-xs text-gray-500">Fields marked (*) are Required</Text>
 				</View>
 
 				<Card style="my-1 mt-6">
@@ -139,26 +140,30 @@ const CompleteRegistrationScreen = ({}) => {
 						control={control}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<FormInput
-								label="Phone number"
-								placeholder="+234 (0) 812 345 6789"
+								label="Phone number *"
+								placeholder="0812 345 6789"
+								sx={`${errors.phone && errorTextFieldClass} `}
 								onBlur={onBlur}
+								defaultValue={user?.contact_info?.phone}
+								type="number"
 								style="flex-1 mr-1"
 								onChangeText={(value) => onChange(value)}
 								value={value}
 							/>
 						)}
 						name="phone"
-						type="number"
-						rules={{ required: true }}
+						rules={{ required: true, minLength: 10, maxLength: 11 }}
 					/>
 
 					<Controller
 						control={control}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<FormInput
-								label="Email Address"
+								label="Email Address *"
 								placeholder="johndoe@student.oauife.edu.eng"
+								defaultValue={user?.contact_info?.email}
 								onBlur={onBlur}
+								sx={`${errors.email && errorTextFieldClass} `}
 								style="flex-1 mr-1"
 								onChangeText={(value) => onChange(value)}
 								value={value}
@@ -168,22 +173,26 @@ const CompleteRegistrationScreen = ({}) => {
 						rules={{ required: true }}
 					/>
 
-					<DateSelector date={dateOfBirth}
-								  mode={"date"}
-								  label={"Date of Birth"}
-								  minDate={new Date(1990, 0, 1)}
-								  maxDate={new Date()}
-								  formatDateValue={"Do MMMM, YYYY"}
-								  setDate={setDateOfBirth}
-								  showPicker={showPicker}
-								  setShowPicker={setShowPicker} />
+					<DateSelector
+						date={dateOfBirth}
+						mode={"date"}
+						label={"Date of Birth *"}
+						minDate={new Date(1990, 0, 1)}
+						maxDate={new Date()}
+						formatDateValue={"Do MMMM, YYYY"}
+						setDate={setDateOfBirth}
+						showPicker={showPicker}
+						setShowPicker={setShowPicker}
+					/>
 
 					<Controller
 						control={control}
 						render={({ field: { onChange, onBlur, value } }) => (
 							<FormInput
-								label="Residential Address"
+								label="Residential Address *"
+								sx={`${errors.address && errorTextFieldClass} `}
 								placeholder="ex: Block K101, Angola Hall, OAU."
+								defaultValue={user?.contact_info?.address}
 								onBlur={onBlur}
 								style="flex-1 mr-1"
 								onChangeText={(value) => onChange(value)}
@@ -194,18 +203,17 @@ const CompleteRegistrationScreen = ({}) => {
 						rules={{ required: true }}
 					/>
 
-
 					<DropDownPicker
 						prompt="Select your Gender"
 						items={genderList}
-						label="Gender"
+						label="Gender *"
 						style="w-full bg-gray-100 rounded-lg"
 						selectionColor="#000"
 						selected={selectedGender}
 						onSelect={(value) => {
 							setSelectedGender(value);
-						}} />
-
+						}}
+					/>
 				</Card>
 
 				<Card style="my-1">
@@ -214,38 +222,39 @@ const CompleteRegistrationScreen = ({}) => {
 						*To be filled only by students of Obafemi Awolowo University.
 					</Text>
 
-
 					<DropDownPicker
 						prompt="Select your faculty"
 						items={facultyList}
-						label="Faculty"
+						label="Faculty *"
 						mode={"dialog"}
 						style="w-full bg-gray-100 rounded-lg"
 						selected={selectedFaculty}
 						onSelect={(value) => {
 							setSelectedFaculty(value);
-						}} />
+						}}
+					/>
 
 					<DropDownPicker
 						prompt="Select your department"
 						items={departmentList}
-						label="Department"
+						label="Department *"
 						style="w-full bg-gray-100 rounded-lg"
 						selected={selectedDepartment}
 						onSelect={(value) => {
 							setSelectedDepartment(value);
-						}} />
+						}}
+					/>
 
 					<DropDownPicker
 						prompt="Select your level"
 						items={levelsList}
-						label="Level"
+						label="Level *"
 						style="w-full bg-gray-100 rounded-lg"
 						selected={selectedLevel}
 						onSelect={(value) => {
 							setSelectedLevel(value);
-						}} />
-
+						}}
+					/>
 				</Card>
 
 				<Card style="my-1">
@@ -264,7 +273,6 @@ const CompleteRegistrationScreen = ({}) => {
 							/>
 						)}
 						name="allergies"
-						rules={{ required: false }}
 					/>
 
 					<Controller
@@ -282,7 +290,6 @@ const CompleteRegistrationScreen = ({}) => {
 							/>
 						)}
 						name="additional_medical_info"
-						rules={{ required: false }}
 					/>
 				</Card>
 

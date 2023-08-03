@@ -1,11 +1,12 @@
 import { Image, Text, View } from "react-native";
 import { CustomButton, FormInput } from "@ui";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@context";
 import { Link, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth, useLocalStorage } from "@hooks";
 import OauLogo from "@assets/images/oau-logo.png";
+import { errorTextFieldClass } from "@utils";
 
 const LoginScreen = ({}) => {
 	const { user, setUser } = useContext(UserContext);
@@ -35,12 +36,17 @@ const LoginScreen = ({}) => {
 		});
 	};
 
+	useEffect(() => {
+		console.log("form-errors", errors);
+	}, [errors]);
+
 	return (
 		<View className={`h-full flex items-center justify-center w-full p-8`}>
 			<View className="w-full">
 				<Image className="w-12 h-12 mb-5 rounded-full" source={OauLogo} />
 				<Text className="text-xl my-2 font-outfit">OAU Health Centre Sign-in</Text>
 				<Text className="my-1">Enter your details to login to OAU Health Centre Companion App.</Text>
+				<Text className="mt-4 text-xs text-gray-500">* - Required</Text>
 			</View>
 
 			<View className="w-full py-4">
@@ -48,9 +54,10 @@ const LoginScreen = ({}) => {
 					control={control}
 					render={({ field: { onChange, onBlur, value } }) => (
 						<FormInput
-							label="User Id"
+							label="User Id *"
 							placeholder="ex: CSC/2023/001"
 							onBlur={onBlur}
+							sx={`${errors.id && errorTextFieldClass} `}
 							onChangeText={(value) => onChange(value)}
 							value={value}
 						/>
@@ -64,9 +71,10 @@ const LoginScreen = ({}) => {
 					render={({ field: { onChange, onBlur, value } }) => (
 						<FormInput
 							type="password"
-							label="password"
+							label="password *"
 							placeholder="***********"
 							onBlur={onBlur}
+							sx={`${errors.password && errorTextFieldClass} `}
 							onChangeText={(value) => onChange(value)}
 							value={value}
 						/>

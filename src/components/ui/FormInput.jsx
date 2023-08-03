@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { TextInput, Text, View, TouchableOpacity } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import PropTypes from "prop-types";
 import * as Icons from "react-native-heroicons/outline";
+import { twMerge } from "tailwind-merge";
 
 function FormInput({
 	placeholder = "Enter text",
@@ -9,6 +10,7 @@ function FormInput({
 	register = {},
 	type = "text",
 	style = "",
+	sx,
 	multiline,
 	disabled,
 	...rest
@@ -23,7 +25,9 @@ function FormInput({
 				<TextInput
 					secureTextEntry={type.toLowerCase() === "password" && !showPassword}
 					keyboardType={type.toLowerCase() === "number" ? "numeric" : "default"}
-					className="bg-gray-100 rounded-lg p-3 w-full focus:border-primary focus:border"
+					className={twMerge(
+						`bg-gray-100 rounded-lg p-3 w-full focus:border-primary focus:border ${sx && sx}`,
+					)}
 					placeholder={placeholder}
 					editable={!disabled}
 					multiline={type.toLowerCase() === "textarea" || multiline}

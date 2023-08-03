@@ -1,11 +1,12 @@
-import { Text, TouchableOpacity, View } from "react-native";
-import { BottomSheetWrapper, CustomButton, FormInput } from "@ui";
+import { Text, View } from "react-native";
+import { BottomSheetWrapper, CustomButton } from "@ui";
 import PropTypes from "prop-types";
 import { BookAppointment } from "@api";
 import { useAuth } from "@hooks";
 import { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
+import DateSelector from "@components/ui/DateSelector";
+import { toast } from "@utils";
 
 const BookAppointmentBottomSheet = ({ show, setShow }) => {
 	const { user, refreshUser } = useAuth();
@@ -47,12 +48,20 @@ const BookAppointmentBottomSheet = ({ show, setShow }) => {
 				.toUpperCase()}`,
 		};
 
-		BookAppointment(payload, user?.id).then((r) => {
-			setIsLoading(false);
-			setShow(false);
 
-			return refreshUser();
-		});
+		BookAppointment(payload, user?.user_id)
+			.then((r) => {
+				setIsLoading(false);
+				setShow(false);
+
+				refreshUser().then((r) => {
+					toast({ message: "Appointment Booked successfully!", type: "success" ;});
+				});
+			})
+			.catch((e) => {
+				alert(e.messa;ge);
+				setIsLoading(false);
+			});
 	};
 
 	return (
@@ -61,23 +70,14 @@ const BookAppointmentBottomSheet = ({ show, setShow }) => {
 				<Text className="mb-1 text-lg font-bold"> Book Appointment at the health center</Text>
 				<Text className="mb-4 text-gray-500"> Fill in the details to book an appointment today.</Text>
 
-				<TouchableOpacity onPress={() => setShowPicker(true)}>
-					<FormInput
-						placeholder="Pick Date and Time"
-						disabled
-						value={`${moment(date).format("Do MMMM,")} by ${moment(date).format("hh:mm A")} `}
-					/>
-				</TouchableOpacity>
-
-				{showPicker && (
-					<DateTimePicker
-						value={date}
-						display="spinner"
-						mode={mode}
-						minuteInterval={30}
-						onChange={onChange}
-					/>
-				)}
+				<DateSelector date={date}
+							  mode={"time"}
+							  displayType={"spinner"}
+							  setDate={setDate}
+							  minDate={new Date()}
+							  minuteInterval={15}
+							  showPicker={showPicker}
+							  setShowPicker={setShowPicker} />
 
 				<CustomButton loading={isLoading} onClick={submitBooking}>
 					Schedule Appointment
