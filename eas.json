@@ -20,7 +20,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://long-lime-dog-yoke.cyclic.cloud",
+        "EXPO_PUBLIC_API_URL": "https://healthdb.cyclic.cloud",
         "EXPO_PUBLIC_API_KEY": "qwerty12345",
         "EXPO_PUBLIC_HIDDEN_FEATURES": "true"
       }
@@ -30,7 +30,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://long-lime-dog-yoke.cyclic.cloud",
+        "EXPO_PUBLIC_API_URL": "https://healthdb.cyclic.cloud",
         "EXPO_PUBLIC_API_KEY": "qwerty12345",
         "EXPO_PUBLIC_HIDDEN_FEATURES": "true"
       }

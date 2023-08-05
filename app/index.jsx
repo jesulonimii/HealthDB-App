@@ -47,7 +47,7 @@ export default function App() {
 	//check if user is logged in
 	useEffect(() => {
 		getFromStorage(QUERY_KEYS.user_data).then((data) => {
-			console.log("user data", data);
+			//console.log("user data", data);
 
 			if (data) {
 				setUser(data);

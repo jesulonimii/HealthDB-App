@@ -63,7 +63,6 @@ export const CompleteInfo = async (data) => {
 		date_of_birth, gender, address, email, additional_medical_info, allergies,
 	} = data
 
-    console.log("check null", data);
 
 	const payload = {
 		student: {
@@ -75,7 +74,7 @@ export const CompleteInfo = async (data) => {
 		personal_info: {
 			first_name: first_name.trim(),
 			last_name: last_name.trim(),
-			profile_image: "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+			profile_image: `https://eportal.oauife.edu.ng/pic.php?image_id=${id.toUpperCase()}20212`,
 			date_of_birth: String(date_of_birth).trim(),
 			gender: gender.trim(),
 		},

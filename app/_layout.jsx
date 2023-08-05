@@ -34,7 +34,7 @@ export default function Layout() {
 				<UserContext.Provider value={{ user, setUser }}>
 					<BottomSheetModalProvider>
 						<AlertNotificationRoot>
-							<StatusBar barStyle="dark-content" hidden={false} translucent={true} />
+							<StatusBar barStyle="dark-content" hidden={false} translucent={false} />
 
 							<SafeAreaView className="w-full h-full">
 								<Slot />

@@ -11,8 +11,8 @@ export const toast = ({ title, message, duration, type = "success" }: toastProps
 	Toast.show({
 		type: ALERT_TYPE[type.toUpperCase() || "SUCCESS"],
 		title: title || null, //"Toast",
-		titleStyle: { fontFamily: "outfit" },
-		textBody: message || "This is toast notification",
+		titleStyle: { fontFamily: "outfit", fontSize: 15, fontWeight: "500" },
+		textBody: message || "This is toast notification!",
 		autoClose: duration || 5000,
 	});
 };

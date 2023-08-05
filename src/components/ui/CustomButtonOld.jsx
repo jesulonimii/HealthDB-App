@@ -1,6 +1,5 @@
-import { Button, Image, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { twMerge } from "tailwind-merge";
-import { TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 import LoadingSpinner from "@components/ui/LoadingSpinner";
 

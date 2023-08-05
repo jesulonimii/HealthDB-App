@@ -43,10 +43,6 @@ const LoginScreen = ({}) => {
 		errors.length > 0 && console.log("form-errors", errors);
 	}, [errors]);
 
-	overrideBackClick(() => {
-		exitApp();
-	});
-
 	return (
 		<View className={`h-full flex items-center justify-center w-full p-8`}>
 			<View className="w-full">

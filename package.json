@@ -7,6 +7,7 @@
     "update": "eas update",
     "start-no-cache": "expo start --clear",
     "android": "expo start --android",
+    "adb-android-install": "cd C:\\Users\\Jesulonimii\\Desktop && adb install healthdb.apk",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "prettify-all": "npx prettier . --write",

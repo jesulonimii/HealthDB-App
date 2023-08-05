@@ -26,12 +26,12 @@ function Header({
 	};
 
 	return (
-		<View className="w-full mt-8 drop-shadow flex-row bg-white border-b border-gray-100 py-2 px-2 h-14 items-center justify-between">
+		<View className="w-full drop-shadow flex-row bg-white border-b border-gray-100 py-2 px-2 h-14 items-center justify-between">
 			<View className="w-[25%]">
 				<TouchableOpacity className="w-8 h-8 p-0 flex" onPress={handleNavigation}>
 					{start_image && (
 						<CustomImage
-							style="w-8 h-8 rounded-full"
+							className="w-8 h-8 rounded-full"
 							src={start_image}
 							defaultImage={GLOBAL.default_user.profile_image}
 						/>

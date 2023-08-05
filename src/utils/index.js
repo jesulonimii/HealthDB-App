@@ -1,6 +1,8 @@
-export QUERY_KEYS from "./query-keys";
-export OAU_DEPARTMENTS from "./oau-departments";
+import { useTailwind } from "nativewind";
 import axios from "axios";
+
+export { default as QUERY_KEYS } from "./query-keys";
+export OAU_DEPARTMENTS from "./oau-departments";
 
 export { toast } from "./CustomAlerts";
 
@@ -22,7 +24,7 @@ export const GLOBAL = {
 
 export const COLORS = {
 	primary: "#010066",
-	secondary: "#b4a22f",
+	secondary: "#eeac05",
 	info: "#045da6",
 	success: "#1f8318",
 	danger: "#d32f2f",
@@ -64,12 +66,37 @@ export const stringToBoolean = (stringValue) => {
 export const callApi = async (config) => {
 	try {
 		const { data } = await axios({ ...config, timeout: 20000 });
-		console.log("axios-data@callApi: ", data);
+		//console.log("axios-data@callApi: ", data);
 		return data;
 	} catch (error) {
-		console.error(error);
+		//console.error(error);
 		return error.response.data;
 	}
 };
 
 export const errorTextFieldClass = "border border-red-500 bg-red-50";
+
+const nativewindConvert = (className) => {
+	return useTailwind({
+		className: className,
+		flatten: true,
+	})[0];
+};
+
+const flattenObject = (obj) => {
+	const flattened = {};
+
+	Object.keys(obj).forEach((key) => {
+		const value = obj[key];
+
+		if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+			Object.assign(flattened, flattenObject(value));
+		} else {
+			flattened[key] = value;
+		}
+	});
+
+	return flattened;
+};
+
+export { nativewindConvert, flattenObject };

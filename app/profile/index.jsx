@@ -32,17 +32,17 @@ function ProfileScreen() {
 			<Header title={"My Profile"} backButton />
 
 			<Body style={"bg-gray-50"}>
-				<Card style="my-2 items-center justify-center">
+				<Card className="my-2 items-center justify-center">
 					<CustomImage
 						defaultImage={GLOBAL.default_user.profile_image}
 						src={profile_image}
-						style="rounded-full w-24 h-24 my-4"
+						className="rounded-full w-24 h-24 my-4"
 					/>
 
 					<Text className="font-outfit text-xl">{`${first_name} ${last_name}`}</Text>
 
 					<View className="flex flex-row gap-1 my-2">
-						<Text>{matric_number}</Text>
+						<Text>{matric_number.toUpperCase()}</Text>
 						<Text className="text-primary">•</Text>
 						<Text>{department}</Text>
 						<Text className="text-primary">•</Text>
@@ -61,7 +61,7 @@ function ProfileScreen() {
 					</View>
 				</Card>
 
-				<Card style="my-2" title="Health Center Info">
+				<Card className="my-2" title="Health Center Info">
 					<Text className="text-gray-500 mt-1">
 						Health Centre id: <Text className="text-black font-medium">{user.user_id?.toUpperCase()}</Text>
 					</Text>
@@ -76,7 +76,7 @@ function ProfileScreen() {
 					</Text>
 				</Card>
 
-				<Card style="my-2" title="Contact info">
+				<Card className="my-2" title="Contact info">
 					<Text className="text-gray-500 mt-1">
 						Phone Number: <Text className="text-black font-medium">{phone}</Text>
 					</Text>
@@ -90,7 +90,7 @@ function ProfileScreen() {
 					</Text>
 				</Card>
 
-				<Card style="my-2" title="Emergency Contacts">
+				<Card className="my-2" title="Emergency Contacts">
 					{user.emergency_contacts.map((item, index) => {
 						return (
 							<Text key={index} className="text-gray-500 mt-1">

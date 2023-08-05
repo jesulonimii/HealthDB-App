@@ -22,6 +22,7 @@ const CompleteRegistrationScreen = ({}) => {
 		register,
 		handleSubmit,
 		watch,
+		setValue,
 		control,
 		formState: { errors },
 	} = useForm();
@@ -64,7 +65,9 @@ const CompleteRegistrationScreen = ({}) => {
 	//============================================================
 
 	//==================States================================
-	const [dateOfBirth, setDateOfBirth] = useState(new Date(user?.personal_info?.date_of_birth) || new Date());
+	const [dateOfBirth, setDateOfBirth] = useState(
+		user?.personal_info?.date_of_birth ? new Date(user?.personal_info?.date_of_birth) : new Date(),
+	);
 	const [showPicker, setShowPicker] = useState(false);
 	const [selectedGender, setSelectedGender] = useState(user?.personal_info?.gender || genderList[0].value);
 	const [facultyList, setFacultyList] = useState([{ label: "Select Faculty", value: "select_faculty" }]);
@@ -83,13 +86,19 @@ const CompleteRegistrationScreen = ({}) => {
 		errors.length > 0 && alert(JSON.stringify(errors));
 	}, [errors]);
 
+	useEffect(() => {
+		setValue("phone", user?.contact_info?.phone);
+		setValue("email", user?.contact_info?.email);
+		setValue("address", user?.contact_info?.address);
+	}, [;user])
+
 	//============================================================
 
 	//====================Functions========================
 
-	overrideBackClick(() => {
+	/*overrideBackClick(() => {
 		Logout();
-	});
+	});*/
 
 	const onSubmit = (data) => {
 		setIsLoading(true);
@@ -97,9 +106,9 @@ const CompleteRegistrationScreen = ({}) => {
 		const patched_data = {
 			...data,
 			date_of_birth: dateOfBirth,
-			user_id: user.user_id,
-			first_name: user.personal_info.first_name,
-			last_name: user.personal_info.last_name,
+			user_id: user?.user_id,
+			first_name: user?.personal_info?.first_name,
+			last_name: user?.personal_info?.last_name,
 			faculty: selectedFaculty,
 			department: selectedDepartment,
 			level: selectedLevel,
@@ -133,7 +142,7 @@ const CompleteRegistrationScreen = ({}) => {
 					<Text className="mt-4 text-xs text-gray-500">Fields marked (*) are Required</Text>
 				</View>
 
-				<Card style="my-1 mt-6">
+				<Card className="my-1 mt-6">
 					<Text className="my-1 text-lg font-outfit">Personal Information </Text>
 
 					<Controller
@@ -216,7 +225,7 @@ const CompleteRegistrationScreen = ({}) => {
 					/>
 				</Card>
 
-				<Card style="my-1">
+				<Card className="my-1">
 					<Text className="my-1 text-lg font-outfit">Student Information </Text>
 					<Text className="my-1 text-gray-400">
 						*To be filled only by students of Obafemi Awolowo University.
@@ -257,7 +266,7 @@ const CompleteRegistrationScreen = ({}) => {
 					/>
 				</Card>
 
-				<Card style="my-1">
+				<Card className="my-1">
 					<Text className="my-1 text-lg font-outfit">Medical Information </Text>
 
 					<Controller

@@ -1,28 +1,43 @@
 import { Image as ReactImage } from "react-native";
 import React, { useEffect, useState } from "react";
-import { twMerge } from "tailwind-merge";
-import { string } from "@types";
+import { array, string } from "@types";
+import { flattenObject, nativewindConvert } from "@utils";
 
 const CustomImage = ({
 	src,
 	defaultImage = "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=",
-	style = "",
+	style = {},
+	className = "",
 	...rest
 }) => {
+	const [imgSrc, setImgSrc] = useState(src || defaultImage);
+
 	useEffect(() => {
 		if (src === "" || src === " " || src === null || src === undefined) {
 			setImgSrc(defaultImage);
 		}
 	}, [src]);
 
-	const [imgSrc, setImgSrc] = useState(src || source || defaultImage);
+	const fetchStyle = flattenObject(style);
+
+	delete fetchStyle?.childClassNames;
+	delete fetchStyle?.mask;
+
+	const styles = {
+		//@ts-ignore
+		...nativewindConvert(`w-24 h-24`),
+		...fetchStyle,
+	};
 
 	return (
 		<>
 			<ReactImage
-				onError={() => setSrc(defaultImage)}
+				onError={() => {
+					console.log("error");
+					setImgSrc(defaultImage);
+				}}
 				source={{ uri: imgSrc }}
-				className={twMerge(`w-24 h-24 ${style}`)}
+				style={styles}
 				{...rest}
 			/>
 		</>
@@ -34,7 +49,7 @@ CustomImage.propTypes = {
 	src: string,
 	source: string,
 	defaultImage: string,
-	style: string,
+	style: array,
 };
 
 export default CustomImage;

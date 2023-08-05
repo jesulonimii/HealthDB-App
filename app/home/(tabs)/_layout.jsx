@@ -1,12 +1,13 @@
 import { Tabs, useRouter } from "expo-router";
 import * as Icons from "react-native-heroicons/outline";
+import * as IconsFilled from "react-native-heroicons/solid";
 import Header from "@components/layout/Header";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "@context";
 import { BackHandler } from "react-native";
 import { useCustomNavigation } from "@hooks";
 import { COLORS } from "@utils";
-import { Activity, Edit, Home } from "@lnanhkhoa/react-native-iconly";
+import { Home, Notification } from "@lnanhkhoa/react-native-iconly";
 
 export default function HomeLayout() {
 	const { overrideBackClick } = useCustomNavigation();
@@ -24,23 +25,26 @@ export default function HomeLayout() {
 	const bottomNav = [
 		{
 			link: "dashboard",
+			title: null,
 			icon: {
 				default: <Home />,
 				active: <Home {...activeIconStyle} />,
 			},
 		},
 		{
-			link: "appointments",
+			link: "news",
+			title: "Health Center news",
 			icon: {
-				default: <Edit />,
-				active: <Edit {...activeIconStyle} />,
+				default: <Icons.MegaphoneIcon className="text-primary rotate-2" />,
+				active: <IconsFilled.MegaphoneIcon className="text-primary rotate-2" />,
 			},
 		},
 		{
-			link: "news",
+			link: "notifications",
+			title: "Notifications",
 			icon: {
-				default: <Activity />,
-				active: <Activity {...activeIconStyle} />,
+				default: <Notification />,
+				active: <Notification {...activeIconStyle} />,
 			},
 		},
 	];
@@ -63,10 +67,10 @@ export default function HomeLayout() {
 								},
 								header: (props) => (
 									<Header
-										title={props.route.name === "appointments" ? props.route.name : null}
-										start_image={profile_image || "-"}
+										title={item.title}
+										start_image={profile_image || "-"} /*
 										endIcon={<Icons.BellIcon className="w-full text-gray-500 mr-2" />}
-										endIconClick={() => router.push("/notifications")}
+										endIconClick={() => router.push("/notifications")}*/
 									/>
 								),
 								tabBarShowLabel: false,

@@ -3,13 +3,13 @@ import { Linking, Platform, Text, ToastAndroid, TouchableOpacity, View } from "r
 import moment from "moment";
 import { Card } from "@components/ui";
 import { Body } from "@components/layout";
-import * as Icons from "react-native-heroicons/outline";
 import { useAuth } from "@hooks";
 import { CustomButton } from "@ui";
 import QRCodeBottomSheet from "../modals/QRCodeBottomSheet";
 import BookAppointmentBottomSheet from "../modals/BookAppointmentBottomSheet";
 import { DeleteAppointment } from "@api";
-import { toast } from "@utils";
+import { COLORS, toast } from "@utils";
+import IconStyled from "@components/ui/IconStyled";
 
 export default function Dashboard() {
 	const { user, refreshUser } = useAuth();
@@ -23,32 +23,30 @@ export default function Dashboard() {
 		{
 			name: "Directions to Health Centre",
 			action: OpenIntentToMap,
-			icon: <Icons.MapPinIcon className="text-primary" />,
+			icon: "Location",
 		},
 		{
 			name: "Schedule Appointment",
 			action: () => setShowAppointmentBS(!showAppointmentBS),
-			icon: <Icons.BuildingOfficeIcon className="text-primary" />,
+			icon: "Edit",
 		},
 		{
 			name: "Display Health Centre QR Code",
 			action: () => setShowQRCode(!showQRCode),
-			icon: <Icons.QrCodeIcon className="text-primary" />,
+			icon: "QrCodeIcon",
 		},
 	];
 
 	useEffect(() => {
 		const { status } = health_centre_registration || {};
 
-		if (status === "true") {
+		if (status === "true" || status === true || status === "completed" || status === "complete") {
 			setHealthCentreStatus("true");
 		} else if (status === "pending") {
 			setHealthCentreStatus("pending");
-		} else if (status === "false") {
+		} else if (status === "false" || status === false || status === "incomplete") {
 			setHealthCentreStatus("false");
 		}
-
-		console.log(health_centre_status);
 	}, [user]);
 
 	const refreshUserDetails = async () => {
@@ -63,10 +61,34 @@ export default function Dashboard() {
 		});
 	};
 
+	const healthCentreStatusStyle = {
+		pending: {
+			text: "Pending",
+			color: "#9d7111",
+			className: "bg-amber-50 text-amber-500",
+			textClassName: "text-[#9d7111]",
+			icon: "ExclamationCircleIcon",
+		},
+		true: {
+			text: "No Issues",
+			color: "#10b981",
+			className: "bg-green-100 text-green-500",
+			textClassName: "text-success",
+			icon: "CheckBadgeIcon",
+		},
+		false: {
+			text: "Incomplete",
+			color: "#ef4444",
+			className: "bg-red-100 text-red-500",
+			textClassName: "text-danger",
+			icon: "XCircleIcon",
+		},
+	};
+
 	return (
-		<View className="flex-1">
+		<View className="flex-1 ">
 			<Body onRefresh={refreshUserDetails}>
-				<Card style="my-2">
+				<Card className="py-8">
 					<Text className="font-outfit text-gray-800 text-xl">
 						{moment().format("HH") < 12
 							? "Good morning "
@@ -78,8 +100,6 @@ export default function Dashboard() {
 
 					<Text className="text-gray-400 mt-1">What do you want to do today?</Text>
 
-					{/*<FormInput placeholder="Search for a product (ex: thrift, shoes, jeans)" />*/}
-
 					<View className="flex flex-row w-full h-18 my-4 gap-x-2 items-start justify-between">
 						{home_actions.map((item, index) => {
 							return (
@@ -87,11 +107,7 @@ export default function Dashboard() {
 									onPress={item.action}
 									key={index}
 									className="flex items-center justify-center flex-1">
-									<View
-										key={index}
-										className={`my-2 rounded-full bg-[#302e2e1a] w-12 h-12 flex items-center justify-center`}>
-										{item.icon}
-									</View>
+									<IconStyled color={COLORS.info} icon={item.icon} />
 									<Text className="text-xs w-[80%] text-gray-400 mt-1 text-center">{item.name}</Text>
 								</TouchableOpacity>
 							);
@@ -99,56 +115,7 @@ export default function Dashboard() {
 					</View>
 				</Card>
 
-				<Card style="my-2" title="Quick Info">
-					<Text className="text-gray-500 mt-1">
-						Health Centre id: <Text className="text-black font-medium">{user.user_id.toUpperCase()}</Text>
-					</Text>
-
-					<Text className="text-gray-500 mt-1">
-						Last Health Centre Visit:{" "}
-						<Text className="text-black font-medium">
-							{user.medical_history.last_visit
-								? moment(user.medical_history.last_visit).fromNow()
-								: "None"}
-						</Text>
-					</Text>
-
-					<View className="flex flex-row items-center gap-x-1">
-						<Text className="text-gray-500 mt-1">Health Centre Registration Status:</Text>
-
-						<View className="flex flex-row items-center h-full gap-x-1">
-							{health_centre_status === "true" ? (
-								<View className="w-2 aspect-square bg-success rounded-full"></View>
-							) : health_centre_status === "pending" ? (
-								<View className="w-2 aspect-square bg-warning rounded-full"></View>
-							) : (
-								<View className="w-2 aspect-square bg-error rounded-full"></View>
-							)}
-							<Text className="text-black font-medium">
-								{health_centre_status === "true"
-									? "Completed"
-									: health_centre_status === "pending"
-									? "Pending"
-									: "Incomplete"}
-							</Text>
-						</View>
-					</View>
-
-					{health_centre_status !== "true" && (
-						<Text
-							className={`rounded-lg p-2 text-center w-full mt-2 ${
-								health_centre_status === "true"
-									? "bg-green-100 text-success"
-									: health_centre_status === "pending"
-									? "bg-amber-50 text-warning"
-									: "bg-red-100 text-error"
-							}`}>
-							{health_centre_registration?.message}
-						</Text>
-					)}
-				</Card>
-
-				<Card style="my-2" title="Pending Appointment">
+				<Card icon={<IconStyled color={COLORS.error} icon={"Calendar"} />} title="Pending Appointment">
 					{pending_appointment ? (
 						<View className="flex">
 							<Text className="text-gray-500 mt-1">
@@ -170,22 +137,51 @@ export default function Dashboard() {
 								</Text>
 							</Text>
 
-							<View className="flex w-full">
-								<CustomButton onClick={cancelAppointment} style="my-2 flex-1 bg-red-500">
-									Cancel Appointment
-								</CustomButton>
-							</View>
+							<CustomButton onClick={cancelAppointment} className="bg-red-500">
+								Cancel Appointment
+							</CustomButton>
 						</View>
 					) : (
-						<View className="flex items-center">
-							<Text className="text-gray-500 mt-3 ">You have no pending appointments.</Text>
+						<View className="flex">
+							<Text className="text-gray-500 my-3 ">You have no pending appointments.</Text>
 
-							<CustomButton
+							{/*<CustomButton
 								onClick={() => setShowAppointmentBS(true)}
-								sx="mt-2"
-								style="my-2 flex-1 bg-primary">
+								className="">
 								Book Appointment
-							</CustomButton>
+							</CustomButton>*/}
+						</View>
+					)}
+				</Card>
+
+				<Card icon={<IconStyled color={COLORS.primary} icon={"RocketLaunchIcon"} />} title="Quick Info">
+					<Text className="text-gray-500 mt-1">
+						Health Centre id: <Text className="text-black font-medium">{user?.user_id?.toUpperCase()}</Text>
+					</Text>
+
+					<Text className="text-gray-500 mt-1">
+						Last Health Centre Visit:{" "}
+						<Text className="text-black font-medium">
+							{user.medical_history.last_visit
+								? moment(user.medical_history.last_visit).fromNow()
+								: "None"}
+						</Text>
+					</Text>
+
+					<Text className="flex-1 text-gray-500 w-fit mt-1">Health Centre Status:</Text>
+
+					{health_centre_status && (
+						<View
+							className={`rounded-lg p-2 w-full  flex flex-row items-center mt-4 ${healthCentreStatusStyle[health_centre_status].className}`}>
+							<IconStyled
+								icon={healthCentreStatusStyle[health_centre_status].icon}
+								color={healthCentreStatusStyle[health_centre_status].color}
+								sx={"w-4"}
+							/>
+							<Text
+								className={`max-w-[80%] ml-3 ${healthCentreStatusStyle[health_centre_status].textClassName}`}>
+								{health_centre_registration?.message}
+							</Text>
 						</View>
 					)}
 				</Card>
