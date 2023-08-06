@@ -10,12 +10,12 @@ const CustomImage = ({
 	className = "",
 	...rest
 }) => {
-	const [imgSrc, setImgSrc] = useState(src || defaultImage);
+	const [imgSrc, setImgSrc] = useState(src);
 
 	useEffect(() => {
-		if (src === "" || src === " " || src === null || src === undefined) {
+		/*if (src === "" || src === " " || src === null || src === undefined) {
 			setImgSrc(defaultImage);
-		}
+		}*/
 	}, [src]);
 
 	const fetchStyle = flattenObject(style);

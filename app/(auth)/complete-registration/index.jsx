@@ -4,8 +4,8 @@ import { CompleteInfo } from "@api";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { useAuth, useCustomNavigation, useLocalStorage } from "@hooks";
-import { errorTextFieldClass, OAU_DEPARTMENTS, QUERY_KEYS } from "@utils";
+import { useAuth, useLocalStorage } from "@hooks";
+import { errorTextFieldClass, OAU_DEPARTMENTS, QUERY_KEYS, toast } from "@utils";
 import { Body, Header } from "@components/layout";
 import { Card } from "@components/ui";
 import DateSelector from "@components/ui/DateSelector";
@@ -15,13 +15,10 @@ const CompleteRegistrationScreen = ({}) => {
 	//========================Hooks====================================
 	const [isLoading, setIsLoading] = useState(false);
 	const { saveToStorage } = useLocalStorage();
-	const { overrideBackClick } = useCustomNavigation();
 	const { Logout, user, setUser } = useAuth();
 	const router = useRouter();
 	const {
-		register,
 		handleSubmit,
-		watch,
 		setValue,
 		control,
 		formState: { errors },
@@ -62,6 +59,7 @@ const CompleteRegistrationScreen = ({}) => {
 		},
 	];
 	const oau_faculties = OAU_DEPARTMENTS;
+	const emailRegex = /\S+@\S+\.\S+/;
 	//============================================================
 
 	//==================States================================
@@ -82,15 +80,19 @@ const CompleteRegistrationScreen = ({}) => {
 
 	useEffect(() => parseDepartmentList(oau_faculties, selectedFaculty, setDepartmentList), [selectedFaculty]); // parse department list to dropdown list
 
-	useEffect(() => {
-		errors.length > 0 && alert(JSON.stringify(errors));
-	}, [errors]);
+	const alertEmptyFields = () => {
+		if (errors.phone) toast({ message: "Please enter a valid phone number", type: "danger", duration: 3000 });
+		if (errors.email) toast({ message: "Please enter a valid email", type: "danger", duration: 3000 });
+		if (errors.address) toast({ message: "Please enter a valid address", type: "danger", duration: 3000 });
+	};
+
+	useEffect(() => alertEmptyFields, [errors?.address, errors?.email, errors?.phone]);
 
 	useEffect(() => {
 		setValue("phone", user?.contact_info?.phone);
 		setValue("email", user?.contact_info?.email);
 		setValue("address", user?.contact_info?.address);
-	}, [;user])
+	}, [user]);
 
 	//============================================================
 
@@ -130,6 +132,11 @@ const CompleteRegistrationScreen = ({}) => {
 				setIsLoading(false);
 				console.log(e);
 			});
+	};
+
+	const clickSubmit = () => {
+		alertEmptyFields();
+		handleSubmit(onSubmit)();
 	};
 
 	return (
@@ -179,7 +186,7 @@ const CompleteRegistrationScreen = ({}) => {
 							/>
 						)}
 						name="email"
-						rules={{ required: true }}
+						rules={{ required: true, pattern: emailRegex }}
 					/>
 
 					<DateSelector
@@ -303,7 +310,7 @@ const CompleteRegistrationScreen = ({}) => {
 				</Card>
 
 				<View className="w-full my-1 mb-16">
-					<CustomButton loading={isLoading} onClick={handleSubmit(onSubmit)} style="my-3">
+					<CustomButton loading={isLoading} onClick={clickSubmit} style="my-3">
 						Finish
 					</CustomButton>
 				</View>
@@ -312,9 +319,7 @@ const CompleteRegistrationScreen = ({}) => {
 	);
 };
 
-
 const parseFacultyList = (oau_faculties, setFacultyList) => {
-
 	const list = [];
 
 	Object.keys(oau_faculties || []).forEach((faculty) => {
@@ -323,12 +328,9 @@ const parseFacultyList = (oau_faculties, setFacultyList) => {
 	});
 
 	setFacultyList(list);
-
 };
 
 const parseDepartmentList = (oau_faculties, selectedFaculty, setDepartment) => {
-
-
 	const department = oau_faculties[selectedFaculty.toLowerCase() || "technology"] || [];
 	const list = [];
 
@@ -337,9 +339,7 @@ const parseDepartmentList = (oau_faculties, selectedFaculty, setDepartment) => {
 		list.push({ label: value, value: value.toLowerCase() });
 	});
 
-
 	setDepartment(list);
-
 };
 
 export default CompleteRegistrationScreen;

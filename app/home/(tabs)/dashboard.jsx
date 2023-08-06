@@ -50,8 +50,9 @@ export default function Dashboard() {
 	}, [user]);
 
 	const refreshUserDetails = async () => {
-		toast({ message: "Refreshed user details", duration: 2000, type: "success" });
-		return refreshUser();
+		return refreshUser().then((r) => {
+			r === true && toast({ message: "Refreshed user details", duration: 2000, type: "success" });
+		});
 	};
 
 	const cancelAppointment = () => {
@@ -162,8 +163,8 @@ export default function Dashboard() {
 					<Text className="text-gray-500 mt-1">
 						Last Health Centre Visit:{" "}
 						<Text className="text-black font-medium">
-							{user.medical_history.last_visit
-								? moment(user.medical_history.last_visit).fromNow()
+							{user?.medical_history?.last_visit
+								? moment(user?.medical_history?.last_visit).fromNow()
 								: "None"}
 						</Text>
 					</Text>

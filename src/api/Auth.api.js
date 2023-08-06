@@ -63,6 +63,8 @@ export const CompleteInfo = async (data) => {
 		date_of_birth, gender, address, email, additional_medical_info, allergies,
 	} = data
 
+	console.log(data);
+
 
 	const payload = {
 		student: {

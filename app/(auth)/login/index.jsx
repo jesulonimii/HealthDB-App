@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "@context";
 import { Link, useRouter } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
-import { useAuth, useCustomNavigation, useLocalStorage } from "@hooks";
+import { useAuth } from "@hooks";
 import OauLogo from "@assets/images/oau-logo.png";
 import { errorTextFieldClass } from "@utils";
 
@@ -12,8 +12,7 @@ const LoginScreen = ({}) => {
 	const { user, setUser } = useContext(UserContext);
 
 	const [isLoading, setIsLoading] = useState(false);
-	const { saveToStorage } = useLocalStorage();
-	const { overrideBackClick, exitApp } = useCustomNavigation();
+
 	const { Login } = useAuth();
 
 	const {

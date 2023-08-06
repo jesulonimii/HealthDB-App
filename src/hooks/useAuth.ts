@@ -19,9 +19,14 @@ const useAuth = () => {
 			if (!user_response.error) {
 				setUser(user_response);
 				try {
-					await saveToStorage(QUERY_KEYS.user_data, user_response);
-					!user_response?.completed_app_registration && router.push("/complete-registration");
-					return true;
+					return await saveToStorage(QUERY_KEYS.user_data, user_response).then((res) => {
+						if (!user_response?.completed_app_registration) {
+							router.push("/complete-registration");
+							return false;
+						} else {
+							return true;
+						}
+					});
 				} catch (e) {
 					return console.log("error-saving-to-storage", e);
 				}
@@ -46,8 +51,14 @@ const useAuth = () => {
 				setUser(r);
 				saveToStorage(QUERY_KEYS.user_data, r)
 					.then((res) => {
-						res.completed_app_registration ? router.push("/home") : router.push("/complete-registration");
 						toast({ message: `Welcome back ${r?.personal_info?.first_name}!` });
+						console.log(res);
+
+						if (!res.completed_app_registration) {
+							return router.push("/complete-registration");
+						}
+
+						router.push("/home");
 					})
 					.catch((e) => {
 						alert("An error occurred while saving to storage");
@@ -62,8 +73,8 @@ const useAuth = () => {
 	const Signup = async (data: { password: string; first_name: string; last_name: string; matric_number: string }) => {
 		return SignupUser(data).then((r) => {
 			if (!r.error) {
-				setUser(r.data);
-				saveToStorage(QUERY_KEYS.user_data, r.data).then((r) => {
+				setUser(r);
+				saveToStorage(QUERY_KEYS.user_data, r).then((r) => {
 					router.push("/complete-registration");
 				});
 			} else {
@@ -72,14 +83,14 @@ const useAuth = () => {
 		});
 	};
 
-	const Logout = (options: { confirm?: boolean } = { confirm: true }) => {
-		const loggingOut = () => {
-			router.push("/login");
-			setUser(null);
-			toast({ message: "Logged out successfully" });
-			removeFromStorage(QUERY_KEYS.user_data).then((r) => console.log(r));
-		};
+	const loggingOut = () => {
+		router.push("/login");
+		setUser(null);
+		toast({ message: "Logged out successfully" });
+		removeFromStorage(QUERY_KEYS.user_data).then((r) => console.log(r));
+	};
 
+	const Logout = (options: { confirm?: boolean } = { confirm: true }) => {
 		options?.confirm
 			? Alert.alert("Logout", "Want to logout?", [
 					{

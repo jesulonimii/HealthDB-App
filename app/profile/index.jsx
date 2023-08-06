@@ -34,23 +34,23 @@ function ProfileScreen() {
 			<Body style={"bg-gray-50"}>
 				<Card className="my-2 items-center justify-center">
 					<CustomImage
-						defaultImage={GLOBAL.default_user.profile_image}
-						src={profile_image}
+						defaultImage={GLOBAL.default_user?.profile_image}
+						src={profile_image ?? ""}
 						className="rounded-full w-24 h-24 my-4"
 					/>
 
-					<Text className="font-outfit text-xl">{`${first_name} ${last_name}`}</Text>
+					<Text className="font-outfit text-xl">{`${first_name ?? "No"} ${last_name ?? "User"}`}</Text>
 
 					<View className="flex flex-row gap-1 my-2">
-						<Text>{matric_number.toUpperCase()}</Text>
+						<Text>{matric_number?.toUpperCase()}</Text>
 						<Text className="text-primary">•</Text>
-						<Text>{department}</Text>
+						<Text>{department ?? ""}</Text>
 						<Text className="text-primary">•</Text>
-						<Text>{faculty}</Text>
+						<Text>{faculty ?? ""}</Text>
 					</View>
 
 					<View className="flex flex-row w-full h-18 my-4 gap-x-2 items-start justify-between">
-						{stats.map((item, index) => {
+						{stats?.map((item, index) => {
 							return (
 								<View key={index} className="flex items-center justify-center flex-1">
 									<Text className="text-xl">{item.value}</Text>
@@ -63,14 +63,14 @@ function ProfileScreen() {
 
 				<Card className="my-2" title="Health Center Info">
 					<Text className="text-gray-500 mt-1">
-						Health Centre id: <Text className="text-black font-medium">{user.user_id?.toUpperCase()}</Text>
+						Health Centre id: <Text className="text-black font-medium">{user?.user_id?.toUpperCase()}</Text>
 					</Text>
 
 					<Text className="text-gray-500 mt-1">
 						Last Visit:{" "}
 						<Text className="text-black font-medium">
 							{user?.medical_history?.last_visit
-								? moment(user.medical_history?.last_visit).fromNow()
+								? moment(user?.medical_history?.last_visit).fromNow()
 								: "None"}
 						</Text>
 					</Text>
@@ -78,20 +78,20 @@ function ProfileScreen() {
 
 				<Card className="my-2" title="Contact info">
 					<Text className="text-gray-500 mt-1">
-						Phone Number: <Text className="text-black font-medium">{phone}</Text>
+						Phone Number: <Text className="text-black font-medium">{phone ?? ""}</Text>
 					</Text>
 
 					<Text className="text-gray-500 mt-1">
-						Email Address: <Text className="text-black font-medium">{email}</Text>
+						Email Address: <Text className="text-black font-medium">{email ?? ""}</Text>
 					</Text>
 
 					<Text className="text-gray-500 mt-1">
-						Residential Address: <Text className="text-black font-medium">{address}</Text>
+						Residential Address: <Text className="text-black font-medium">{address ?? ""}</Text>
 					</Text>
 				</Card>
 
 				<Card className="my-2" title="Emergency Contacts">
-					{user.emergency_contacts.map((item, index) => {
+					{user?.emergency_contacts?.map((item, index) => {
 						return (
 							<Text key={index} className="text-gray-500 mt-1">
 								{item.name} - {item.relationship} -{" "}
