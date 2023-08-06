@@ -96,7 +96,7 @@ export const CompleteInfo = async (data) => {
 
 	const config = {
 		method: "patch",
-		url: `${API_URL}/users/${id.toLowerCase().trim().replaceAll("/", "%2F")}`,
+		url: `${API_URL}/users/edit?user_id=${id.toLowerCase().trim()}`,
 		data: payload,
 		headers: {
 			"Content-Type": "application/json",

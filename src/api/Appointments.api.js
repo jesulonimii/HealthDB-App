@@ -7,7 +7,7 @@ export const BookAppointment = async (data, id) => {
 
 	const config = {
 		method: "post",
-		url: `${API_URL}/appointments/${id.replaceAll("/", "%2F").toLowerCase().trim()}`,
+		url: `${API_URL}/appointments/create?user_id=${id.toLowerCase().trim()}`,
 		data: data,
 		headers: {
 			"Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const DeleteAppointment = async (id) => {
 
 	const config = {
 		method: "delete",
-		url: `${API_URL}/appointments/${id.toLowerCase().trim().replaceAll("/", "%2F")}`,
+		url: `${API_URL}/appointments/delete?user_id=${id.toLowerCase().trim()}`,
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: API_KEY,
