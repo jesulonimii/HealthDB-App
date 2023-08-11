@@ -14,3 +14,15 @@ export const GetHealthCenterNews = async (id) => {
 
 	return await callApi(config);
 };
+
+export const GetNotifications = async (user_id) => {
+	const config = {
+		method: "get",
+		url: `${API_URL}/users/notifications?user_id=${user_id}`,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	};
+
+	return await callApi(config);
+};

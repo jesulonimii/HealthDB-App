@@ -1,32 +1,36 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEYS } from "@utils";
-import { GetHealthCenterNews } from "@api";
 import { Body } from "@components/layout";
 import moment from "moment";
+import { GetNotifications } from "@/src/api/Dashboard.api";
+import { useAuth } from "@hooks";
+import NotificationInformationBottomSheet from "@/app/home/modals/NotificationInformationBottomSheet";
+import { openBottomSheet } from "@components/ui/BottomSheetWrapper";
 
 const Notification = ({}) => {
-	const [news, setNews] = useState([]);
+	const [notifications, setNotifications] = useState([]);
+	const { user } = useAuth();
 
 	const {
-		data: newsData,
+		data: notificationData,
 		status,
 		error,
 		refetch: refetchNews,
 	} = useQuery({
-		queryKey: [QUERY_KEYS.health_center_news],
-		queryFn: () => GetHealthCenterNews(),
+		queryKey: [QUERY_KEYS.user_notifications, user?.user_id],
+		queryFn: () => GetNotifications(user?.user_id),
 		onSuccess: (data) => {
-			setNews(data);
+			setNotifications(data);
 		},
 	});
 
 	return (
 		<View className={`flex-1 bg-bg-50`}>
-			{news && news.length > 0 ? (
+			{notifications && notifications.length > 0 ? (
 				<Body onRefresh={refetchNews} className="w-full h-[93%] pb-16 justify-center items-center">
-					{news.map((item, index) => (
+					{notifications.map((item, index) => (
 						<NotificationItem key={index} notification={item} />
 					))}
 				</Body>
@@ -41,13 +45,26 @@ const Notification = ({}) => {
 
 const NotificationItem = ({ notification }) => {
 	return (
-		<View className="w-full h-fit min-h-[9vh] border-b border-b-gray-200 px-4 py-4">
-			<Text className="font-outfit w-[85%] my-2">{notification.title}</Text>
-			<View className="flex flex-row justify-between">
-				<Text className="text-gray-500 text-xs">{moment(notification.date).format("dddd Do MMM, YYYY")}</Text>
-				<Text className="text-gray-500 text-xs">{moment(notification.date).format("HH:MM a")}</Text>
-			</View>
-		</View>
+		<>
+			<TouchableOpacity
+				onPress={openBottomSheet}
+				className="w-full min-h-[9vh] mb-2 h-fit border-b border-b-gray-200 px-2 py-3 flex">
+				<Text className="font-outfit w-[85%] h-fit mb-1">{notification.title}</Text>
+
+				<Text numberOfLines={1} className="text-sm text-gray-500 text-ellipsis w-full">
+					{notification.message.replace("\n", "")}
+				</Text>
+
+				<View className="flex flex-row justify-between mt-3 h-fit">
+					<Text className="text-gray-400 text-xs">
+						{moment(notification.date).format("dddd Do MMM, YYYY")}
+					</Text>
+					<Text className="text-gray-400 text-xs">{moment(notification.date).format("h:mm a")}</Text>
+				</View>
+			</TouchableOpacity>
+
+			<NotificationInformationBottomSheet notification={notification} />
+		</>
 	);
 };
 

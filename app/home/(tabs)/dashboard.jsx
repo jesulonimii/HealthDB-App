@@ -56,7 +56,7 @@ export default function Dashboard() {
 	};
 
 	const cancelAppointment = () => {
-		DeleteAppointment(user?.user_id).then((r) => {
+		DeleteAppointment(user?.user_id, pending_appointment?.appointment_id).then((r) => {
 			toast({ message: "Appointment cancelled", duration: 2000 });
 			return refreshUser();
 		});

@@ -1,5 +1,5 @@
 import { useTailwind } from "nativewind";
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 export { default as QUERY_KEYS } from "./query-keys";
 export OAU_DEPARTMENTS from "./oau-departments";
@@ -64,14 +64,8 @@ export const stringToBoolean = (stringValue) => {
 
 
 export const callApi = async (config) => {
-	try {
-		const { data } = await axios({ ...config, timeout: 20000 });
-		//console.log("axios-data@callApi: ", data);
-		return data;
-	} catch (error) {
-		//console.error(error);
-		return error.response.data;
-	}
+	const { data } = await axiosInstance(config);
+	return data;
 };
 
 export const errorTextFieldClass = "border border-red-500 bg-red-50";

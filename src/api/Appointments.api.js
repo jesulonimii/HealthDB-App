@@ -19,14 +19,16 @@ export const BookAppointment = async (data, id) => {
 	return !appointmentInfo.error ? appointmentInfo : { error: appointmentInfo.error };
 };
 
-export const DeleteAppointment = async (id) => {
-
+export const DeleteAppointment = async (user_id, appointment_id) => {
 	const config = {
 		method: "delete",
-		url: `${API_URL}/appointments/delete?user_id=${id.toLowerCase().trim()}`,
+		url: `${API_URL}/appointments/delete?user_id=${user_id.toLowerCase().trim()}`,
 		headers: {
 			"Content-Type": "application/json",
 			Authorization: API_KEY,
+		},
+		data: {
+			appointment_id: appointment_id,
 		},
 	};
 

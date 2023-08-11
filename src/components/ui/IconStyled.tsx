@@ -8,10 +8,11 @@ type IconStyledProps = {
 	icon: string | React.ReactNode;
 	color?: string;
 	bgColor?: string;
+	size?: number;
 	sx?: string;
 };
 
-const StyledIcon = ({ icon = "home", color = "#d54b05", bgColor = "#d31616", sx }: IconStyledProps) => {
+const StyledIcon = ({ icon = "home", color = "#d54b05", bgColor = "#d31616", size, sx }: IconStyledProps) => {
 	const getIcon = (icon: string) => {
 		const heroPack = Icons[icon];
 		const iconlyPack = Iconly[icon];
@@ -22,7 +23,7 @@ const StyledIcon = ({ icon = "home", color = "#d54b05", bgColor = "#d31616", sx 
 
 	return (
 		<View
-			className={`my-2 rounded-xl w-10 h-10 flex items-center justify-center ${sx}}`}
+			className={`my-2 rounded-xl w-10 h-10 flex items-center justify-center ${sx}`}
 			style={{
 				backgroundColor: HEX2RGBA(color || bgColor, 0.2),
 			}}>
@@ -31,8 +32,11 @@ const StyledIcon = ({ icon = "home", color = "#d54b05", bgColor = "#d31616", sx 
 			{typeof icon === "string" ? (
 				<IconTag
 					primaryColor={color}
+					size={size}
 					style={{
 						color: HEX2RGBA(color || bgColor),
+						width: size,
+						height: size,
 					}}
 				/>
 			) : (
