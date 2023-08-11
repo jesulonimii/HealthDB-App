@@ -1,11 +1,11 @@
-import { Text, View } from "react-native";
-import { BottomSheetWrapper, CustomButton } from "@ui";
-import PropTypes from "prop-types";
-import moment from "moment/moment";
-import IconStyled from "@components/ui/IconStyled";
-import { COLORS } from "@utils";
-import { useEffect, useRef } from "react";
-import { dismissBottomSheet, openBottomSheet } from "@components/ui/BottomSheetWrapper";
+import { Text, View } from "react-native"
+import { BottomSheetWrapper, CustomButton } from "@ui"
+import PropTypes from "prop-types"
+import moment from "moment/moment"
+import IconStyled from "@components/ui/IconStyled"
+import { COLORS } from "@utils"
+import { useEffect, useRef } from "react"
+import { dismissBottomSheet, openBottomSheet } from "@components/ui/BottomSheetWrapper"
 
 const NotificationInformationBottomSheet = ({ show, notification }) => {
 	const bottomSheetRef = useRef(null)
@@ -14,7 +14,7 @@ const NotificationInformationBottomSheet = ({ show, notification }) => {
 		show && openBottomSheet(bottomSheetRef)
 	}, [show])
 
-	f;unction closeSh;eet() {
+	function closeSheet() {
 		dismissBottomSheet(bottomSheetRef)
 	}
 
