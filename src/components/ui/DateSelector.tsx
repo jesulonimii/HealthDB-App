@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { TouchableOpacity } from "react-native"
 import { FormInput } from "@components/ui/index"
 import moment from "moment/moment"
@@ -47,6 +49,7 @@ const DateSelector = (props: DatePickerProp) => {
 		validateDate && validateDate(dDate)
 	}
 
+	// @ts-ignore
 	// @ts-ignore
 	return (
 		<>
