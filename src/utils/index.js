@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance"
 
 export { default as QUERY_KEYS } from "./query-keys"
 export { default as OAU_DEPARTMENTS } from "./oau-departments"
-export { default as NotificationProvider } from "./notificationProvider"
+export { default as NotificationProvider, scheduleLocalNotification } from "./notificationProvider"
 
 export { toast } from "./CustomAlerts";
 

@@ -140,7 +140,7 @@ export default function Dashboard() {
 								</Text>
 							</Text>
 
-							<CustomButton onClick={cancelAppointment} className="bg-red-500">
+							<CustomButton onClick={cancelAppointment} style={{ backgroundColor: COLORS.error }}>
 								Cancel Appointment
 							</CustomButton>
 						</View>

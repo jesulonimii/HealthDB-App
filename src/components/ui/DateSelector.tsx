@@ -32,7 +32,7 @@ const DateSelector = (props: DatePickerProp) => {
 		mode = "date",
 		onDateChange,
 		validateDate,
-		formatDateValue = "Do MMMM, [by] hh:mm A",
+		formatDateValue = "Do MMMM, [by] h:mm A",
 		placeholder = `Pick ${mode.toUpperCase()}`,
 		displayType = "calendar",
 		...rest

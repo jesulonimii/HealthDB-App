@@ -1,22 +1,22 @@
-import { twMerge } from "tailwind-merge";
-import { Pressable, Text } from "react-native";
-import LoadingSpinner from "@components/ui/LoadingSpinner";
-import React from "react";
-import { flattenObject, nativewindConvert } from "@utils";
-import * as Icons from "react-native-heroicons/outline";
+import { twMerge } from "tailwind-merge"
+import { Pressable, Text } from "react-native"
+import LoadingSpinner from "@components/ui/LoadingSpinner"
+import React from "react"
+import { flattenObject, nativewindConvert } from "@utils"
+import * as Icons from "react-native-heroicons/outline"
 
-interface CustomButtonPropTypes {
-	variant?: "contained" | "outlined" | "text";
-	style?: object;
-	disabled?: boolean;
-	onClick?: (event: any) => void;
-	endIcon?: any;
-	startIcon?: any;
-	loading?: boolean;
-	success?: boolean;
-	className?: string;
-	textClassName?: string;
-	children: React.ReactNode;
+type CustomButtonPropTypes = {
+	variant?: "contained" | "outlined" | "text"
+	disabled?: boolean
+	onClick?: (event: any) => void
+	endIcon?: any
+	startIcon?: any
+	loading?: boolean
+	success?: boolean
+	className?: string
+	textClassName?: string
+	children: React.ReactNode
+	[x: string]: any
 }
 
 function CustomButton(props: CustomButtonPropTypes) {
@@ -32,17 +32,19 @@ function CustomButton(props: CustomButtonPropTypes) {
 		className,
 		textClassName,
 		children,
-	} = props;
+	} = props
+
+	//console.log(style);
 
 	const variance = {
 		contained: `text-white `,
 		outlined: "text-black border border-primary bg-transparent",
 		text: "text-black bg-transparent",
-	};
+	}
 
 	const handleClick = (event: any) => {
-		onClick && onClick(event);
-	};
+		onClick && onClick(event)
+	}
 
 	const styles = {
 		//@ts-ignore
@@ -50,7 +52,9 @@ function CustomButton(props: CustomButtonPropTypes) {
 		...flattenObject(style),
 		//@ts-ignore
 		...nativewindConvert(`${success && "bg-success"}`),
-	};
+	}
+
+	//console.log("button styles", styles);
 
 	return (
 		<Pressable style={styles} onPress={handleClick}>
@@ -62,7 +66,7 @@ function CustomButton(props: CustomButtonPropTypes) {
 				<Text className={twMerge(`text-white uppercase ${textClassName}`)}>{children}</Text>
 			)}
 		</Pressable>
-	);
+	)
 }
 
 export default CustomButton;

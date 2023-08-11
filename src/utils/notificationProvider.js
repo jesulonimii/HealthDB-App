@@ -10,6 +10,26 @@ Notifications.setNotificationHandler({
 	}),
 })
 
+
+export const scheduleLocalNotification = async ({ title = null, message, date }) => {
+	console.log("scheduleLocalNotification", title, message, date)
+
+	let trigger_time = Math.abs(new Date() - date) / 1000
+
+	if (message && date) {
+		Notifications.scheduleNotificationAsync({
+			content: {
+				title: title,
+				body: message,
+				data: { data: "goes here" },
+			},
+			trigger: {
+				seconds: trigger_time,
+			},
+		}).then((r) => console.log(r))
+	}
+}
+
 export async function registerForPushNotificationsAsync() {
 	let token
 	if (Device.isDevice) {

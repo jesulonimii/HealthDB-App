@@ -5,7 +5,7 @@ import { useAuth } from "@hooks"
 import { useState } from "react"
 import moment from "moment"
 import DateSelector from "@components/ui/DateSelector"
-import { toast } from "@utils"
+import { scheduleLocalNotification, toast } from "@utils"
 import { dismissBottomSheet } from "@components/ui/BottomSheetWrapper"
 
 const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
@@ -24,16 +24,18 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 	}
 
 	const checkDate = (selectedDate) => {
-		const _5pm = new Date().toJSON().substring(0, 11) + "17:30:00.00Z"
-		const _8am = new Date().toJSON().substring(0, 11) + "08:00:00.00Z"
-		const _6pm = new Date().toJSON().substring(0, 11) + "18:30:00.00Z"
-
+		//const _5pm = new Date().toJSON().substring(0, 11) + "17:30:00.00Z"
+		const _8am = new Date().toJSON().substring(0, 11) + "08:00:00.00+1:00"
+		const _6pm = new Date().toJSON().substring(0, 11) + "18:30:00.00+1:00"
 		if (selectedDate.getTime() < new Date().getTime()) {
 			setDate(new Date(new Date().getTime() + 30 * 60000))
+			toast({ message: "You cannot book an appointment at a past time today", type: "error" })
 		} else if (moment(selectedDate).isAfter(moment(_6pm))) {
-			setDate(new Date(_5pm))
+			setDate(new Date(_6pm))
+			toast({ message: "You can only book an appointment between now and 6.30pm ", type: "error" })
 		} else if (moment(selectedDate).isBefore(moment(_8am))) {
-			setDate(new Date(_5pm))
+			setDate(new Date(_8am))
+			toast({ message: "You can only book an appointment between 8am and 6.30pm ", type: "error" })
 		} else {
 			setDate(selectedDate)
 		}
@@ -55,6 +57,15 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 
 				refreshUser().then((r) => {
 					toast({ message: "Appointment Booked successfully!", type: "success" })
+
+					scheduleLocalNotification({
+						message: "Your appointment at the health center is scheduled to start in 10 minutes ⏰",
+						date: new Date(date.getTime() - 10 * 60000),
+					}).then((r) => console.log("scheduled notification for 10 minutes to appointment"))
+					scheduleLocalNotification({
+						message: "It's time for your appointment at the health center, Good luck! 🎉",
+						date: date,
+					}).then((r) => console.log("scheduled notification for appointment time"))
 				})
 			})
 			.catch((e) => {
@@ -73,6 +84,7 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 					date={date}
 					mode={"time"}
 					displayType={"spinner"}
+					onDateChange={onChange}
 					setDate={setDate}
 					minDate={new Date()}
 					minuteInterval={15}
