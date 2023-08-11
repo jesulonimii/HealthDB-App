@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Linking, Platform, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
-import moment from "moment";
-import { Card } from "@components/ui";
-import { Body } from "@components/layout";
-import { useAuth } from "@hooks";
-import { CustomButton } from "@ui";
-import QRCodeBottomSheet from "../modals/QRCodeBottomSheet";
-import BookAppointmentBottomSheet from "../modals/BookAppointmentBottomSheet";
-import { DeleteAppointment } from "@api";
-import { COLORS, toast } from "@utils";
-import IconStyled from "@components/ui/IconStyled";
+import React, { useEffect, useRef, useState } from "react"
+import { Linking, Platform, Text, ToastAndroid, TouchableOpacity, View } from "react-native"
+import moment from "moment"
+import { Card } from "@components/ui"
+import { Body } from "@components/layout"
+import { useAuth } from "@hooks"
+import { CustomButton } from "@ui"
+import QRCodeBottomSheet from "../modals/QRCodeBottomSheet"
+import BookAppointmentBottomSheet from "../modals/BookAppointmentBottomSheet"
+import { DeleteAppointment } from "@api"
+import { COLORS, toast } from "@utils"
+import IconStyled from "@components/ui/IconStyled"
+import { openBottomSheet } from "@components/ui/BottomSheetWrapper"
 
 export default function Dashboard() {
-	const { user, refreshUser } = useAuth();
-	const { health_centre_registration, pending_appointment } = user || {};
-	const { first_name, profile_image } = user?.personal_info || {};
-	const [showAppointmentBS, setShowAppointmentBS] = useState(false);
-	const [showQRCode, setShowQRCode] = useState(false);
-	const [health_centre_status, setHealthCentreStatus] = useState("pending");
+	const { user, refreshUser } = useAuth()
+	const { health_centre_registration, pending_appointment } = user || {}
+	const { first_name, profile_image } = user?.personal_info || {}
+	const [health_centre_status, setHealthCentreStatus] = useState("pending")
+
+	const qrCodeSheetRef = useRef(null)
+	const bookAppointmentSheetRef = useRef(null)
 
 	const home_actions = [
 		{
@@ -27,40 +29,40 @@ export default function Dashboard() {
 		},
 		{
 			name: "Schedule Appointment",
-			action: () => setShowAppointmentBS(!showAppointmentBS),
+			action: () => openBottomSheet(bookAppointmentSheetRef),
 			icon: "Edit",
 		},
 		{
 			name: "Display Health Centre QR Code",
-			action: () => setShowQRCode(!showQRCode),
+			action: () => openBottomSheet(qrCodeSheetRef),
 			icon: "QrCodeIcon",
 		},
-	];
+	]
 
 	useEffect(() => {
-		const { status } = health_centre_registration || {};
+		const { status } = health_centre_registration || {}
 
 		if (status === "true" || status === true || status === "completed" || status === "complete") {
-			setHealthCentreStatus("true");
+			setHealthCentreStatus("true")
 		} else if (status === "pending") {
-			setHealthCentreStatus("pending");
+			setHealthCentreStatus("pending")
 		} else if (status === "false" || status === false || status === "incomplete") {
-			setHealthCentreStatus("false");
+			setHealthCentreStatus("false")
 		}
-	}, [user]);
+	}, [user])
 
 	const refreshUserDetails = async () => {
 		return refreshUser().then((r) => {
-			r === true && toast({ message: "Refreshed user details", duration: 2000, type: "success" });
-		});
-	};
+			r === true && toast({ message: "Refreshed user details", duration: 2000, type: "success" })
+		})
+	}
 
 	const cancelAppointment = () => {
 		DeleteAppointment(user?.user_id, pending_appointment?.appointment_id).then((r) => {
-			toast({ message: "Appointment cancelled", duration: 2000 });
-			return refreshUser();
-		});
-	};
+			toast({ message: "Appointment cancelled", duration: 2000 })
+			return refreshUser()
+		})
+	}
 
 	const healthCentreStatusStyle = {
 		pending: {
@@ -84,7 +86,7 @@ export default function Dashboard() {
 			textClassName: "text-danger",
 			icon: "XCircleIcon",
 		},
-	};
+	}
 
 	return (
 		<View className="flex-1 ">
@@ -111,7 +113,7 @@ export default function Dashboard() {
 									<IconStyled color={COLORS.info} icon={item.icon} />
 									<Text className="text-xs w-[80%] text-gray-400 mt-1 text-center">{item.name}</Text>
 								</TouchableOpacity>
-							);
+							)
 						})}
 					</View>
 				</Card>
@@ -177,7 +179,7 @@ export default function Dashboard() {
 							<IconStyled
 								icon={healthCentreStatusStyle[health_centre_status].icon}
 								color={healthCentreStatusStyle[health_centre_status].color}
-								sx={"w-4"}
+								className={"w-4 h-4"}
 							/>
 							<Text
 								className={`max-w-[80%] ml-3 ${healthCentreStatusStyle[health_centre_status].textClassName}`}>
@@ -188,10 +190,10 @@ export default function Dashboard() {
 				</Card>
 			</Body>
 
-			<BookAppointmentBottomSheet setShow={setShowAppointmentBS} show={showAppointmentBS} />
-			<QRCodeBottomSheet setShow={setShowQRCode} show={showQRCode} />
+			<BookAppointmentBottomSheet bottomSheetRef={bookAppointmentSheetRef} />
+			<QRCodeBottomSheet bottomSheetRef={qrCodeSheetRef} />
 		</View>
-	);
+	)
 }
 
 function OpenIntentToMap() {

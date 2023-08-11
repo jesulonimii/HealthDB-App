@@ -1,8 +1,9 @@
-import { useTailwind } from "nativewind";
-import axiosInstance from "./axiosInstance";
+import { useTailwind } from "nativewind"
+import axiosInstance from "./axiosInstance"
 
-export { default as QUERY_KEYS } from "./query-keys";
-export OAU_DEPARTMENTS from "./oau-departments";
+export { default as QUERY_KEYS } from "./query-keys"
+export { default as OAU_DEPARTMENTS } from "./oau-departments"
+export { default as NotificationProvider } from "./notificationProvider"
 
 export { toast } from "./CustomAlerts";
 

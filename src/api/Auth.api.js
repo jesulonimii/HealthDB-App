@@ -1,6 +1,6 @@
-import { callApi, GLOBAL } from "@utils";
+import { callApi, GLOBAL } from "@utils"
 
-const API_URL = GLOBAL.API_URL;
+const API_URL = GLOBAL.API_URL
 const API_KEY = GLOBAL.API_KEY;
 
 export const GetUserInfo = async (id) => {
@@ -108,5 +108,25 @@ export const CompleteInfo = async (data) => {
 
 	return await callApi(config);
 };
+
+export const UpdateUserPushNotificationToken = async (user_id, token) => {
+	const payload = {
+		push_notifications_token: token,
+	}
+
+	const config = {
+		method: "patch",
+		url: `${API_URL}/users/edit?user_id=${user_id.toLowerCase().trim()}`,
+		data: payload,
+		headers: {
+			"Content-Type": "application/json",
+			Authorization: API_KEY,
+		},
+	}
+
+	console.log(config.url)
+
+	return await callApi(config)
+}
 
 

@@ -4,17 +4,22 @@ import PropTypes from "prop-types";
 import moment from "moment/moment";
 import IconStyled from "@components/ui/IconStyled";
 import { COLORS } from "@utils";
-import { useBottomSheetModal } from "@gorhom/bottom-sheet";
+import { useEffect, useRef } from "react";
+import { dismissBottomSheet, openBottomSheet } from "@components/ui/BottomSheetWrapper";
 
-const NotificationInformationBottomSheet = ({ notification }) => {
-	const { dismissAll } = useBottomSheetModal();
+const NotificationInformationBottomSheet = ({ show, notification }) => {
+	const bottomSheetRef = useRef(null)
 
-	function closeSheet() {
-		dismissAll();
+	useEffect(() => {
+		show && openBottomSheet(bottomSheetRef)
+	}, [show])
+
+	f;unction closeSh;eet() {
+		dismissBottomSheet(bottomSheetRef)
 	}
 
 	return (
-		<BottomSheetWrapper height="70%">
+		<BottomSheetWrapper height="70%" sheetRef={bottomSheetRef}>
 			<View className="flex-1 justify-evenly items-center h-full  px-8">
 				<View className="flex flex-col items-center mt-8 w-full">
 					<IconStyled
@@ -37,8 +42,8 @@ const NotificationInformationBottomSheet = ({ notification }) => {
 				</CustomButton>
 			</View>
 		</BottomSheetWrapper>
-	);
-};
+	)
+}
 
 NotificationInformationBottomSheet.propTypes = {
 	notification: PropTypes.object.isRequired,

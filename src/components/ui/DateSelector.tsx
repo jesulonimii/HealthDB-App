@@ -1,10 +1,26 @@
-import { TouchableOpacity } from "react-native";
-import { FormInput } from "@components/ui/index";
-import moment from "moment/moment";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { date, functions, oneOf, required, string } from "@types";
+import { TouchableOpacity } from "react-native"
+import { FormInput } from "@components/ui/index"
+import moment from "moment/moment"
+import DateTimePicker from "@react-native-community/datetimepicker"
 
-const DateSelector = (props) => {
+type DatePickerProp = {
+	date: Date
+	setDate: (date: Date) => void
+	showPicker: boolean
+	setShowPicker: (value: any) => void
+	minDate?: Date
+	maxDate?: Date
+	mode?: "date" | "time" | "datetime" | "countdown"
+	onDateChange?: (event: any, date: Date) => void
+	validateDate?: (date: Date) => void
+	formatDateValue?: string
+	placeholder?: string
+	label?: string
+	displayType?: "default" | "spinner" | "calendar" | "clock"
+	[x: string]: any
+}
+
+const DateSelector = (props: DatePickerProp) => {
 	const {
 		date,
 		setDate,
@@ -20,17 +36,18 @@ const DateSelector = (props) => {
 		placeholder = `Pick ${mode.toUpperCase()}`,
 		displayType = "calendar",
 		...rest
-	} = props;
+	} = props
 
 	const onChange = (event, selectedDate) => {
-		const dDate = selectedDate;
+		const dDate = selectedDate
 
-		setShowPicker(false);
-		setDate(dDate);
-		onDateChange && onDateChange(event, dDate);
-		validateDate && validateDate(dDate);
-	};
+		setShowPicker(false)
+		setDate(dDate)
+		onDateChange && onDateChange(event, dDate)
+		validateDate && validateDate(dDate)
+	}
 
+	// @ts-ignore
 	return (
 		<>
 			<TouchableOpacity onPress={() => setShowPicker(true)}>
@@ -41,6 +58,7 @@ const DateSelector = (props) => {
 					value={moment(date).format(formatDateValue)}
 				/>
 
+				{/* @ts-ignore */}
 				{showPicker && (
 					<DateTimePicker
 						value={date}
@@ -55,11 +73,11 @@ const DateSelector = (props) => {
 				)}
 			</TouchableOpacity>
 		</>
-	);
-};
+	)
+}
 
 
-DateSelector.propTypes = {
+/*DateSelector.propTypes = {
 	date: date,
 	setDate: required.functions,
 	showPicker: required.boolean,
@@ -73,6 +91,6 @@ DateSelector.propTypes = {
 	placeholder: string,
 	label: string,
 	displayType: oneOf(["default", "spinner", "calendar", "clock"]),
-};
+};*/
 
 export default DateSelector;
