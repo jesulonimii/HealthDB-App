@@ -4,16 +4,9 @@ import PropTypes from "prop-types"
 import moment from "moment/moment"
 import IconStyled from "@components/ui/IconStyled"
 import { COLORS } from "@utils"
-import { useEffect, useRef } from "react"
-import { dismissBottomSheet, openBottomSheet } from "@components/ui/BottomSheetWrapper"
+import { dismissBottomSheet } from "@components/ui/BottomSheetWrapper"
 
-const NotificationInformationBottomSheet = ({ show, notification }) => {
-	const bottomSheetRef = useRef(null)
-
-	useEffect(() => {
-		show && openBottomSheet(bottomSheetRef)
-	}, [show])
-
+const NotificationInformationBottomSheet = ({ bottomSheetRef, notification }) => {
 	function closeSheet() {
 		dismissBottomSheet(bottomSheetRef)
 	}
@@ -37,7 +30,7 @@ const NotificationInformationBottomSheet = ({ show, notification }) => {
 					<Text className="my-12 w-full text-[16px] text-gray-700">{notification?.message}</Text>
 				</View>
 
-				<CustomButton sx="my-3 mb-6 absolute bottom-0" onClick={closeSheet}>
+				<CustomButton className="my-3 mb-6 absolute bottom-0" onClick={closeSheet}>
 					Done
 				</CustomButton>
 			</View>

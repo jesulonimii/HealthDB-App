@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { COLORS, GLOBAL, NotificationProvider } from "@utils"
 import { UserContext } from "@context"
-import { Slot } from "expo-router"
+import { router, Slot } from "expo-router"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 import { Outfit_500Medium, Outfit_700Bold, useFonts } from "@expo-google-fonts/outfit"
@@ -47,7 +47,20 @@ export default function Layout() {
 
 		responseListener.current = NotificationProvider?.Notifications.addNotificationResponseReceivedListener(
 			(response) => {
-				console.log(response)
+				const {
+					notification: {
+						request: {
+							content: {
+								data: { screen },
+							},
+						},
+					},
+				} = response
+
+				// When the user taps on the notification, this line checks if they //are suppose to be taken to a particular screen
+				if (screen) {
+					router.push(screen)
+				}
 			},
 		)
 
