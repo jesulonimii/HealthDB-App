@@ -12,7 +12,7 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 	const { user, refreshUser } = useAuth()
 
 	const [isLoading, setIsLoading] = useState(false)
-	const [date, setDate] = useState(new Date(new Date().getTime() + 30 * 60000))
+	const [date, setDate] = useState(new Date(new Date().getTime() + 15 * 60000))
 	const [showPicker, setShowPicker] = useState(false)
 	const [mode, setMode] = useState("time")
 
@@ -66,6 +66,11 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 					}
 
 					scheduleLocalNotification({
+						message: "Your appointment has been set, you will be reminded when it's time. 👌",
+						date: "now",
+					}).then((r) => console.log("notification for appointment time"))
+
+					scheduleLocalNotification({
 						message: "It's time for your appointment at the health center, Good luck! 🎉",
 						date: date,
 					}).then((r) => console.log("scheduled notification for appointment time"))
@@ -90,7 +95,7 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 					onDateChange={onChange}
 					setDate={setDate}
 					minDate={new Date()}
-					minuteInterval={15}
+					minuteInterval={5}
 					showPicker={showPicker}
 					setShowPicker={setShowPicker}
 				/>

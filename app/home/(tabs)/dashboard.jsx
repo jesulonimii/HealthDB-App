@@ -17,6 +17,7 @@ export default function Dashboard() {
 	const { health_centre_registration, pending_appointment } = user || {}
 	const { first_name, profile_image } = user?.personal_info || {}
 	const [health_centre_status, setHealthCentreStatus] = useState("pending")
+	const [cancelAppointmentLoading, setCancelAppointmentLoading] = useState(false)
 
 	const qrCodeSheetRef = useRef(null)
 	const bookAppointmentSheetRef = useRef(null)
@@ -58,8 +59,10 @@ export default function Dashboard() {
 	}
 
 	const cancelAppointment = () => {
+		setCancelAppointmentLoading(true)
 		DeleteAppointment(user?.user_id, pending_appointment?.appointment_id).then((r) => {
 			toast({ message: "Appointment cancelled", duration: 2000 })
+			setCancelAppointmentLoading(false)
 			return refreshUser()
 		})
 	}
@@ -136,11 +139,14 @@ export default function Dashboard() {
 							<Text className="text-gray-500 mt-1">
 								Time:{" "}
 								<Text className="text-black font-medium">
-									{moment(pending_appointment?.date_time).format("hh:mm A")}
+									{moment(pending_appointment?.date_time).format("h:mm A")}
 								</Text>
 							</Text>
 
-							<CustomButton onClick={cancelAppointment} style={{ backgroundColor: COLORS.error }}>
+							<CustomButton
+								loading={cancelAppointmentLoading}
+								onClick={cancelAppointment}
+								className="bg-red-500">
 								Cancel Appointment
 							</CustomButton>
 						</View>
@@ -157,7 +163,10 @@ export default function Dashboard() {
 					)}
 				</Card>
 
-				<Card icon={<IconStyled color={COLORS.primary} icon={"RocketLaunchIcon"} />} title="Quick Info">
+				<Card
+					className="mb-8"
+					icon={<IconStyled color={COLORS.primary} icon={"RocketLaunchIcon"} />}
+					title="Quick Info">
 					<Text className="text-gray-500 mt-1">
 						Health Centre id: <Text className="text-black font-medium">{user?.user_id?.toUpperCase()}</Text>
 					</Text>

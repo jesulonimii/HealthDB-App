@@ -5,6 +5,7 @@ import moment from "moment/moment"
 import IconStyled from "@components/ui/IconStyled"
 import { COLORS } from "@utils"
 import { dismissBottomSheet } from "@components/ui/BottomSheetWrapper"
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 
 const NotificationInformationBottomSheet = ({ bottomSheetRef, notification }) => {
 	function closeSheet() {
@@ -12,9 +13,9 @@ const NotificationInformationBottomSheet = ({ bottomSheetRef, notification }) =>
 	}
 
 	return (
-		<BottomSheetWrapper height="70%" sheetRef={bottomSheetRef}>
-			<View className="flex-1 justify-evenly items-center h-full  px-8">
-				<View className="flex flex-col items-center mt-8 w-full">
+		<BottomSheetWrapper height={70} sheetRef={bottomSheetRef}>
+			<View className="h-[80%] flex justify-between">
+				<View className="h-fit mb-3 flex flex-col items-center mt-8 w-full">
 					<IconStyled
 						color={COLORS.primary}
 						sx={"w-fit h-fit p-12 text-xl rounded-full mb-8"}
@@ -26,13 +27,19 @@ const NotificationInformationBottomSheet = ({ bottomSheetRef, notification }) =>
 					<Text className="text-gray-500">
 						{moment(notification?.date).format("[On] dddd Do MMM, YYYY [by] h:mm a")}
 					</Text>
-
-					<Text className="my-12 w-full text-[16px] text-gray-700">{notification?.message}</Text>
 				</View>
 
-				<CustomButton className="my-3 mb-6 absolute bottom-0" onClick={closeSheet}>
-					Done
-				</CustomButton>
+				<View className="h-[80%] overflow-y-clip pt-4 pb-24">
+					<BottomSheetScrollView>
+						<Text className="w-full px-6 text-gray-700">{notification?.message}</Text>
+					</BottomSheetScrollView>
+				</View>
+
+				<View className="h-fit px-4 items-center bg-white w-full">
+					<CustomButton className="mb-8 absolute bottom-0" onClick={closeSheet}>
+						Done
+					</CustomButton>
+				</View>
 			</View>
 		</BottomSheetWrapper>
 	)

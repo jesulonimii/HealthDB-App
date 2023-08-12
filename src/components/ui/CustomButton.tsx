@@ -4,6 +4,7 @@ import LoadingSpinner from "@components/ui/LoadingSpinner"
 import React from "react"
 import { flattenObject, nativewindConvert } from "@utils"
 import * as Icons from "react-native-heroicons/outline"
+import { styled } from "nativewind"
 
 type CustomButtonPropTypes = {
 	variant?: "contained" | "outlined" | "text"
@@ -48,7 +49,7 @@ function CustomButton(props: CustomButtonPropTypes) {
 
 	const styles = {
 		//@ts-ignore
-		...nativewindConvert(`bg-primary w-full px-4 py-3 min-h-16 flex justify-center items-center rounded-xl my-3`),
+		...nativewindConvert(`bg-primary w-full px-4 py-3.5 min-h-16 flex justify-center items-center rounded-xl my-3`),
 		...flattenObject(style),
 		//@ts-ignore
 		...nativewindConvert(`${success && "bg-success"}`),
@@ -69,4 +70,4 @@ function CustomButton(props: CustomButtonPropTypes) {
 	)
 }
 
-export default CustomButton;
+export default styled(CustomButton)

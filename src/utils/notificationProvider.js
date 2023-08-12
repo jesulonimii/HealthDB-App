@@ -14,7 +14,14 @@ Notifications.setNotificationHandler({
 export const scheduleLocalNotification = async ({ title = null, message, date }) => {
 	console.log("scheduleLocalNotification", title, message, date)
 
-	let trigger_time = Math.abs(new Date() - date) / 1000
+	let trigger_time = null
+
+	if (date === "now") {
+		trigger_time = 2
+	} else {
+		trigger_time = Math.abs(new Date() - date) / 1000
+	}
+
 
 	if (message && date) {
 		Notifications.scheduleNotificationAsync({

@@ -1,7 +1,8 @@
-import { Image as ReactImage } from "react-native";
-import React, { useEffect, useState } from "react";
-import { array, string } from "@types";
-import { flattenObject, nativewindConvert } from "@utils";
+import { Image as ReactImage } from "react-native"
+import React, { useEffect, useState } from "react"
+import { array, string } from "@types"
+import { flattenObject, nativewindConvert } from "@utils"
+import { styled } from "nativewind"
 
 const CustomImage = ({
 	src,
@@ -10,39 +11,39 @@ const CustomImage = ({
 	className = "",
 	...rest
 }) => {
-	const [imgSrc, setImgSrc] = useState(src);
+	const [imgSrc, setImgSrc] = useState(src)
 
 	useEffect(() => {
 		/*if (src === "" || src === " " || src === null || src === undefined) {
 			setImgSrc(defaultImage);
 		}*/
-	}, [src]);
+	}, [src])
 
-	const fetchStyle = flattenObject(style);
+	const fetchStyle = flattenObject(style)
 
-	delete fetchStyle?.childClassNames;
-	delete fetchStyle?.mask;
+	delete fetchStyle?.childClassNames
+	delete fetchStyle?.mask
 
 	const styles = {
 		//@ts-ignore
 		...nativewindConvert(`w-24 h-24`),
 		...fetchStyle,
-	};
+	}
 
 	return (
 		<>
 			<ReactImage
 				onError={() => {
-					console.log("error");
-					setImgSrc(defaultImage);
+					console.log("error")
+					setImgSrc(defaultImage)
 				}}
 				source={{ uri: imgSrc }}
 				style={styles}
 				{...rest}
 			/>
 		</>
-	);
-};
+	)
+}
 
 
 CustomImage.propTypes = {
@@ -52,4 +53,4 @@ CustomImage.propTypes = {
 	style: array,
 };
 
-export default CustomImage;
+export default styled(CustomImage);

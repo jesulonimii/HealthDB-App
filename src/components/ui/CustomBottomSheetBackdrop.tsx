@@ -9,7 +9,7 @@ type BackdropProps = {
 const CustomBottomSheetBackdrop = ({ animatedIndex, style }: BackdropProps) => {
 	// animated variables
 	const containerAnimatedStyle = useAnimatedStyle(() => ({
-		opacity: interpolate(animatedIndex.value, [0.5, 1], [0.5, 1], Extrapolate.CLAMP),
+		opacity: interpolate(animatedIndex.value, [0.5, 1], [1, 1], Extrapolate.CLAMP),
 	}))
 
 	// styles
@@ -17,7 +17,7 @@ const CustomBottomSheetBackdrop = ({ animatedIndex, style }: BackdropProps) => {
 		() => [
 			style,
 			{
-				backgroundColor: "#000000",
+				backgroundColor: "rgba(0,0,0,0.75)",
 			},
 			containerAnimatedStyle,
 		],

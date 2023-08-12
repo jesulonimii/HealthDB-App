@@ -1,14 +1,15 @@
-import { Text, View } from "react-native";
-import React from "react";
-import { twMerge } from "tailwind-merge";
-import { flattenObject, nativewindConvert } from "@utils";
+import { Text, View } from "react-native"
+import React from "react"
+import { twMerge } from "tailwind-merge"
+import { flattenObject, nativewindConvert } from "@utils"
+import { styled } from "nativewind"
 
 function CardUi({ style = "", className, children = null, title, icon, iconStyle = "" }) {
 	const styles = {
 		//@ts-ignore
 		...nativewindConvert(`w-full bg-white h-fit rounded-xl border border-gray-100 p-5 my-2 overflow-clip`),
 		...flattenObject(style),
-	};
+	}
 
 	return (
 		<View style={styles}>
@@ -18,7 +19,7 @@ function CardUi({ style = "", className, children = null, title, icon, iconStyle
 			</View>
 			{children}
 		</View>
-	);
+	)
 }
 
-export default CardUi;
+export default styled(CardUi)

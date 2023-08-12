@@ -7,15 +7,23 @@ let ref = null
 type BottomSheetWrapperTypes = {
 	children: React.ReactNode
 	sheetRef: any
-	height?: string
+	height?: number | [number, number]
 }
 
-const BottomSheetWrapper = ({ children, sheetRef, height = "50%" }: BottomSheetWrapperTypes) => {
+const BottomSheetWrapper = ({ children, sheetRef, height = [50, 50] }: BottomSheetWrapperTypes) => {
 	// ref
 	//const bottomSheetRef = useRef(null);
 
+	const parseHeights = () => {
+		if (typeof height === "number") {
+			return [`${height}%`]
+		} else {
+			return [`${height[0]}%`, `${height[1]}%`]
+		}
+	}
+
 	// variables
-	const snapPoints = useMemo(() => [height], [])
+	const snapPoints = useMemo(parseHeights, [])
 
 	const close = () => sheetRef.current?.close()
 
