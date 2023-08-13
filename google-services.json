@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "823750496850",
+    "project_id": "oau-healthdb",
+    "storage_bucket": "oau-healthdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823750496850:android:677bbf814eda7ac2a9c58b",
+        "android_client_info": {
+          "package_name": "codes.jesulonimii.swep.healthdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823750496850-aovbjpuppt83o6b2rij4vvjl35b0bp6u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Q3VOpexLGr8YEHXZPsr5gFFtTyYDdCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823750496850-aovbjpuppt83o6b2rij4vvjl35b0bp6u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

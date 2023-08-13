@@ -22,7 +22,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "codes.jesulonimii.swep.healthdb"
+      "package": "codes.jesulonimii.swep.healthdb",
+      "googleServicesFile": "./google-services.json"
     },
     "scheme": "healthdb",
     "extra": {

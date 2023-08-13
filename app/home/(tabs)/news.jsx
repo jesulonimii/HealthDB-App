@@ -1,14 +1,14 @@
-import { Pressable, Text, View } from "react-native";
-import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { COLORS, QUERY_KEYS } from "@utils";
-import { GetHealthCenterNews } from "@api";
-import { Body } from "@components/layout";
-import { Card, CustomImage, LoadingSpinner } from "@ui";
-import { router } from "expo-router";
+import { Pressable, Text, View } from "react-native"
+import React, { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { COLORS, QUERY_KEYS } from "@utils"
+import { GetHealthCenterNews } from "@api"
+import { Body } from "@components/layout"
+import { Card, CustomImage, LoadingSpinner } from "@ui"
+import { router } from "expo-router"
 
 const News = ({}) => {
-	const [news, setNews] = useState([]);
+	const [news, setNews] = useState([])
 
 	const {
 		data: newsData,
@@ -19,9 +19,9 @@ const News = ({}) => {
 		queryKey: [QUERY_KEYS.health_center_news],
 		queryFn: () => GetHealthCenterNews(),
 		onSuccess: (data) => {
-			setNews(data);
+			setNews(data)
 		},
-	});
+	})
 
 	return (
 		<View className={`flex-1 bg-bg-50`}>
@@ -31,6 +31,7 @@ const News = ({}) => {
 					{news.map((item, index) => (
 						<NewsItem key={index} news={item} />
 					))}
+					<Text className="text-gray-500 text-xs text-center my-4">-- End --</Text>
 				</Body>
 			) : status === "loading" ? (
 				<Body onRefresh={refetchNews}>
@@ -47,8 +48,8 @@ const News = ({}) => {
 				</Body>
 			)}
 		</View>
-	);
-};
+	)
+}
 
 const NewsItem = ({ news }) => {
 	return (

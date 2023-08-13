@@ -58,13 +58,6 @@ const BookAppointmentBottomSheet = ({ bottomSheetRef }) => {
 				refreshUser().then((r) => {
 					toast({ message: "Appointment Booked successfully!", type: "success" })
 
-					if (moment(date).isBefore(moment(new Date().getTime() + 10 * 60000))) {
-						scheduleLocalNotification({
-							message: "Your appointment at the health center is scheduled to start in 10 minutes ⏰",
-							date: new Date(date.getTime() - 10 * 60000),
-						}).then((r) => console.log("scheduled notification for 10 minutes to appointment"))
-					}
-
 					scheduleLocalNotification({
 						message: "Your appointment has been set, you will be reminded when it's time. 👌",
 						date: "now",

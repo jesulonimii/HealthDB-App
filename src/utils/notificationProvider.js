@@ -5,8 +5,8 @@ import { Platform } from "react-native"
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({
 		shouldShowAlert: true,
-		shouldPlaySound: false,
-		shouldSetBadge: false,
+		shouldPlaySound: true,
+		shouldSetBadge: true,
 	}),
 })
 
@@ -50,7 +50,8 @@ export async function registerForPushNotificationsAsync() {
 			alert("Failed to get push token for push notification!")
 			return
 		}
-		token = (await Notifications.getExpoPushTokenAsync({ projectId: "887f3a90-4fc7-41a4-b3e9-234b2f940f43" })).data
+		token = (await Notifications.getDevicePushTokenAsync(/*{ projectId: "887f3a90-4fc7-41a4-b3e9-234b2f940f43" }*/))
+			.data
 		console.log("Refresh expo push token:", token)
 	} else {
 		alert("Must use physical device for Push Notifications")
