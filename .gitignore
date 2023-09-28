@@ -13,6 +13,8 @@ npm-debug.*
 web-build/
 
 .idea/
+dist/google-services.json
+dist/eas.json
 
 package-lock.json
 
